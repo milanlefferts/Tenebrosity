@@ -1,0 +1,223 @@
+Initialize engine version: 5.5.0f3 (38b4efef76f0)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GT 650M (ID=0xfd1)
+    Vendor:   NVIDIA
+    VRAM:     2017 MB
+    Driver:   21.21.13.6909
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
+Loading C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
+Platform assembly: C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+- Completed reload, in  0.357 seconds
+Platform assembly: C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Milan\Documents\GitHub\Tenebrosity\DevBuilds\Tenebrosity_devbuild_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 2.127616 ms
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatKeyPressText.OnEnable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatGoal.OnEnable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatProgressVisual.OnEnable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+Elize
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Player Turn
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 3968 -> priority: 1 
+  Thread -> id: 5b10 -> priority: 1 
+ no longer effects Elize
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 8.344025 ms
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatKeyPressText.OnEnable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatGoal.OnEnable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatProgressVisual.OnEnable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 1201.
+Total: 1.068270 ms (FindLiveObjects: 0.140115 ms CreateObjectMapping: 0.092369 ms MarkObjects: 0.822398 ms  DeleteObjects: 0.010709 ms)
+
+Elize
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Player Turn
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+ no longer effects Elize
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.678711 ms
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatKeyPressText.OnEnable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatGoal.OnEnable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatProgressVisual.OnEnable () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 1201.
+Total: 1.340023 ms (FindLiveObjects: 0.129852 ms CreateObjectMapping: 0.062025 ms MarkObjects: 1.132973 ms  DeleteObjects: 0.013833 ms)
+
+Elize
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Player Turn
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+ no longer effects Elize
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Lakedweller
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Enemy Turn
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+ no longer effects Lakedweller
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Slam
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Angelo (UnityEngine.GameObject)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatIndicator.ResolveKeyPress_RemoveObj (Int32 i) [0x00000] in <filename unknown>:0 
+  at BeatIndicator.ResolveKeyPress () [0x00000] in <filename unknown>:0 
+  at BeatIndicator.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+Angelo
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Player Turn
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+ no longer effects Angelo
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at BeatIndicator.ResolveKeyPress_RemoveObj (Int32 i) [0x00000] in <filename unknown>:0 
+  at BeatIndicator.ResolveKeyPress () [0x00000] in <filename unknown>:0 
+  at BeatIndicator.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+Heartseeker
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Enemy Turn
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+ no longer effects Heartseeker
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Peck
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Elize (UnityEngine.GameObject)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Frederic
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Player Turn
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
++3 Defense
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Lakedweller
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Enemy Turn
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+ no longer effects Lakedweller
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Slam
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Frederic (UnityEngine.GameObject)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+

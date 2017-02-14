@@ -34,31 +34,13 @@ public class PartyController : MonoBehaviour {
 		// UI
 		UI = GameObject.FindGameObjectWithTag ("UI");
 
-
-
-
-		/*
-		elizeAbilities = new string[] {"DrainBlood", "Debilitate", "UnholyMending", "QuickeningPulse"};
-		angeloAbilities = new string[] {"ShoulderBlade", "GraveInsult", "RibCage", "SkullCracker"};
-		fredericAbilities = new string[] {"Tear", "PrimalRoar", "LickWounds", "Pounce"};
-*/
 	}
 
-
-	/*
-	public string[] GetAbilities (string characterName) {
-		switch (characterName) {
-		case "Elize":
-			return elizeAbilities;
-		case "Angelo":
-			return angeloAbilities;
-		case "Frederic":
-			return fredericAbilities;
-		default:
-			return new string[]{};
+	void Update () {
+		if (Input.GetKeyDown (KeyCode.R)) {
+			Application.LoadLevel (0);
 		}
-	}*/
-
+	}
 
 
 
