@@ -1,6 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\EnemyEncounter.cs">
+    <Files>
+      <File FileName="Assets\Scripts\PlayerController.cs" Line="60" Column="3" />
+      <File FileName="Assets\Scripts\RigidbodyFPS.cs" Line="34" Column="33" />
+      <File FileName="Assets\Scripts\DialogueCollider.cs" Line="23" Column="3" />
+      <File FileName="Assets\Scripts\Interactable.cs" Line="18" Column="30" />
+      <File FileName="Assets\Scripts\EnemyEncounter.cs" Line="58" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
