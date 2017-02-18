@@ -8,6 +8,10 @@ public class Interactable : MonoBehaviour {
 	public GameObject dialogue;
 	AudioSource audioSource;
 
+	string[] lines;
+
+	bool speaking;
+
 	void Start () {
 
 		audioSource = GetComponent<AudioSource> ();
@@ -16,11 +20,12 @@ public class Interactable : MonoBehaviour {
 
 		dialogue = transform.Find ("Dialogue").gameObject;
 		dialogue.SetActive (false);
+
 	}
 	
 	void Update () {
 		// If player interacts with this character, play dialogue
-		if (dialogueIcon.activeSelf && !audioSource.isPlaying) {
+		if (dialogueIcon.activeSelf && !audioSource.isPlaying && !speaking) {
 			if (Input.GetKeyDown (KeyCode.E)) {
 				StartCoroutine (Speak ());
 			}
@@ -29,44 +34,62 @@ public class Interactable : MonoBehaviour {
 
 	}
 
+
 	IEnumerator Speak () {
-		dialogueIcon.SetActive (false);
+
 		GetDialogue ();
-		dialogue.SetActive (true);
-		audioSource.Play ();
 
-		//while (audioSource.isPlaying) {
-		//	yield return null;
-		//}
+		speaking = true;
 
-		yield return new WaitForSeconds (1.5f);
+		// Moves through all dialogue
+		foreach (string line in lines) {
+			// deactivate dialogue icon
+			dialogueIcon.SetActive (false);
 
-		dialogue.SetActive (false);
+			// set new line as text
+			dialogue.GetComponent<TextMesh> ().text = line;
+			audioSource.Play ();
+			dialogue.SetActive (true);
+
+			yield return new WaitForSeconds(0.1f);
+
+			dialogueIcon.SetActive (true);
+			// wait for player input to continue conversation
+			while (!Input.GetKeyDown (KeyCode.E) && audioSource.isPlaying) {
+				yield return null;
+			}
+
+			dialogue.SetActive (false);
+
+		
+			yield return new WaitForSeconds (0.1f);
+
+		}
+
+		speaking = false;
+
 	}
 
 	void GetDialogue () {
-		string words;
+		string[] words;
 		switch (this.name) {
 		case "Lakedweller": 
-			words = "Oh it's you again..";
+			lines = new string[] {"Oh it's you again..", "What do you want?"};
 			// assign sound
 			break;
 		case "Bob": 
-			words = "Have you seen any feet \n lying around?";
+			lines =  new string[] {"Have you seen any feet \n lying around?"};
 			// assign sound
 			break;
 		case "Grave": 
-			words = "Here lies Roderick, \n a man of few words \n and fewer deeds";
+			lines =  new string[] {"Here lies Roderick, \n a man of few words \n and fewer deeds"};
 			// assign sound
 			break;
 		default:
-			words = "Nothing";
+			lines =  new string[] { "Nothing"};
 			// assign sound
 			break;
 		}
-
-		dialogue.GetComponent<TextMesh> ().text = words;
-		// assign sound
 
 	}
 
