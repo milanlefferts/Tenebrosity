@@ -19,18 +19,21 @@ public class Friendly : MonoBehaviour {
 	public string type;
 	public string weakness;
 	public int deathThroes;
-
 	public int damageModifier;
 	public int defenseModifier;
+
+	bool isDead;
 
 	public GameObject selectedPointer;
 	GameObject statusIcon;
 	GameObject deathThroesIcon;
-
-	bool isDead;
-
+		
 	public GameObject textTemplate;
 
+	// Sound
+	AudioSource audioSource;
+	public AudioClip death;
+	public AudioClip hit;
 
 	void Start () {
 		combatController = GameObject.FindGameObjectWithTag ("CombatController").GetComponent<CombatController> ();
@@ -44,6 +47,7 @@ public class Friendly : MonoBehaviour {
 		statusIcon = transform.FindChild ("Status").gameObject;
 		deathThroesIcon = transform.FindChild ("DeathThroes").gameObject;
 
+		audioSource = this.GetComponent<AudioSource> ();
 
 		SetAbilitiesAndStats ();
 
@@ -57,7 +61,7 @@ public class Friendly : MonoBehaviour {
 
 	void Update () {
 		if (!isDead) {
-			if (health < 0) {
+			if (health <= 0) {
 				Death ();
 			} else if (health > healthMax) {
 				health = healthMax;
@@ -130,6 +134,10 @@ public class Friendly : MonoBehaviour {
 		// Death animation
 		this.transform.FindChild("Sprite").gameObject.GetComponent<Animator>().SetTrigger("Death");
 
+		// Death sound
+		audioSource.clip = death;
+		audioSource.Play ();
+
 		// Adjust turn order
 		this.gameObject.tag = "Untagged";
 		combatController.UpdateTurnOrder ("PC");
@@ -148,8 +156,6 @@ public class Friendly : MonoBehaviour {
 	}
 
 	public void Damage (int dmg, int prc, string type) {
-
-
 		CheckDeathThroes (type);
 
 		int dam = 0;
@@ -169,7 +175,12 @@ public class Friendly : MonoBehaviour {
 		health -= dam;
 		GameObject damageIcon = Instantiate (abilityController.bloodDrop, this.transform.position, Quaternion.identity);
 		damageIcon.GetComponentInChildren<TextMesh> ().text = dam + "";
+
+		audioSource.clip = hit;
+		audioSource.Play ();
+
 		UpdateUIText ();
+
 	}
 
 
@@ -181,6 +192,9 @@ public class Friendly : MonoBehaviour {
 		GameObject healIcon = Instantiate (abilityController.bloodDrop, this.transform.position, Quaternion.identity);
 		healIcon.GetComponentInChildren<TextMesh> ().text = heal + "";
 		UpdateUIText ();
+
+		audioSource.clip = hit;
+		audioSource.Play ();
 	}
 
 	public void InflictStatus (string stat, int dur) {
@@ -189,6 +203,9 @@ public class Friendly : MonoBehaviour {
 		//print (this.name + " was inflicted by " + stat);
 		SpawnText (stat);
 		UpdateStatusIcon ();
+
+		audioSource.clip = hit;
+		audioSource.Play ();
 	}
 
 	public void UpdateStatusIcon () {

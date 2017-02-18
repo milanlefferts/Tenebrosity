@@ -8,13 +8,13 @@ public class EnemyEncounter : MonoBehaviour {
 	
 	GameController gameController;
 
-
-
 	AudioSource audioSource;
 	AsyncOperation async;
 	bool isLoading;
 
 	GameObject loadingScreen;
+
+	string[] rewards;
 
 	void Start () {
 
@@ -23,7 +23,7 @@ public class EnemyEncounter : MonoBehaviour {
 		loadingScreen = GameObject.Find ("LoadingScreen");
 		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
 
-
+		GetEncounterData ();
 		StartCoroutine(LoadScene());
 	}
 
@@ -32,25 +32,12 @@ public class EnemyEncounter : MonoBehaviour {
 	}
 
 
-
-	void GetDialogue () {
-		string words;
+	void GetEncounterData () {
 		switch (this.name) {
-		case "Lakedweller": 
-			words = "Oh it's you again..";
-			// assign sound
-			break;
-		case "Bob": 
-			words = "Have you seen any feet \n lying around?";
-			// assign sound
-			break;
-		case "Grave": 
-			words = "Here lies Roderick, \n a man of few words \n and fewer deeds";
-			// assign sound
+		case "EnemyEncounter": 
+			rewards = new string[] {"Bone", "Bone", "Bone", "Tooth", "Essence", "Frozen Heart"};
 			break;
 		default:
-			words = "Nothing";
-			// assign sound
 			break;
 		}
 	}
@@ -58,7 +45,7 @@ public class EnemyEncounter : MonoBehaviour {
 	void OnTriggerEnter() {
 		if (!isLoading) {
 			// Set this object as the Enemy Encounter and saved player position
-			gameController.SaveSceneState(this.gameObject.name);
+			gameController.SaveSceneState(this.gameObject.name, rewards);
 
 			// play enemy battlecry
 			audioSource.Play ();
@@ -72,10 +59,8 @@ public class EnemyEncounter : MonoBehaviour {
 	}
 
 	IEnumerator LoadScene() {
-		
 
-		// Play transition animation
-		//StartCoroutine(TransitionAnimation());
+		// Save Encounter info
 
 		// Start Async loading operation
 		Debug.LogWarning("ASYNC LOAD STARTED - " +

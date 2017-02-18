@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour {
 	CombatController combatController;
 	AbilityController abilityController;
 
+	// Stats
 	public int health;
 	public int healthMax;
 	public string[] abilityArray;
@@ -14,17 +15,21 @@ public class Enemy : MonoBehaviour {
 	public string type;
 	public string weakness;
 	public int deathThroes;
-
 	public int damageModifier;
 	public int defenseModifier;
+
+	bool isDead;
 
 	public GameObject selectedPointer;
 	GameObject statusIcon;
 	GameObject deathThroesIcon;
 
-	bool isDead;
-
 	public GameObject textTemplate;
+
+	// Sound
+	AudioSource audioSource;
+	public AudioClip death;
+	public AudioClip hit;
 
 	void Start () {
 		combatController = GameObject.FindGameObjectWithTag ("CombatController").GetComponent<CombatController> ();
@@ -35,6 +40,8 @@ public class Enemy : MonoBehaviour {
 
 		statusIcon = transform.FindChild ("Status").gameObject;
 		deathThroesIcon = transform.FindChild ("DeathThroes").gameObject;
+
+		audioSource = this.GetComponent<AudioSource> ();
 
 		SetAbilities ();
 
@@ -49,7 +56,7 @@ public class Enemy : MonoBehaviour {
 
 	void Update () {
 		if (!isDead) {
-			if (health < 0) {
+			if (health <= 0) {
 				Death ();
 			} else if (health > healthMax) {
 				health = healthMax;
@@ -61,7 +68,7 @@ public class Enemy : MonoBehaviour {
 	void SetAbilities () {
 		switch (this.name) {
 		case "Lakedweller":
-			health = 10;
+			health = 0;
 			type = "Tainted";
 			abilityArray = new string[] {"Slam"};
 			break;
@@ -99,6 +106,7 @@ public class Enemy : MonoBehaviour {
 		//SpawnText ("Death");
 
 		isDead = true;
+
 		// store relevant data
 
 		// save experience / item drops
@@ -108,6 +116,9 @@ public class Enemy : MonoBehaviour {
 		statusIcon.GetComponent<SpriteRenderer>().sprite = null;
 		deathThroesIcon.GetComponent<SpriteRenderer>().sprite = null;
 
+		// Death sound
+		audioSource.clip = death;
+		audioSource.Play ();
 
 		// Adjust turn order
 		this.gameObject.tag = "Untagged";
@@ -147,6 +158,10 @@ public class Enemy : MonoBehaviour {
 		health -= dam;
 		GameObject damageIcon = Instantiate (abilityController.bloodDrop, this.transform.position, Quaternion.identity);
 		damageIcon.GetComponentInChildren<TextMesh> ().text = dam + "";
+
+
+		audioSource.clip = hit;
+		audioSource.Play ();
 	}
 
 	public void Heal (int heal) {
@@ -156,6 +171,10 @@ public class Enemy : MonoBehaviour {
 		}
 		GameObject healIcon = Instantiate (abilityController.bloodDrop, this.transform.position, Quaternion.identity);
 		healIcon.GetComponentInChildren<TextMesh> ().text = heal + "";
+
+		audioSource.clip = hit;
+		audioSource.Play ();
+
 	}
 
 	public void InflictStatus (string stat, int dur) {
@@ -164,6 +183,9 @@ public class Enemy : MonoBehaviour {
 		SpawnText (stat);
 		//print (this.name + " was inflicted by " + stat);
 		UpdateStatusIcon ();
+
+		audioSource.clip = hit;
+		audioSource.Play ();
 	}
 
 	public void UpdateStatusIcon () {

@@ -35,9 +35,11 @@ public class Interactable : MonoBehaviour {
 		dialogue.SetActive (true);
 		audioSource.Play ();
 
-		while (audioSource.isPlaying) {
-			yield return null;
-		}
+		//while (audioSource.isPlaying) {
+		//	yield return null;
+		//}
+
+		yield return new WaitForSeconds (1.5f);
 
 		dialogue.SetActive (false);
 	}

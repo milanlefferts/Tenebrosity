@@ -66,9 +66,20 @@ public class CombatController : MonoBehaviour {
 	bool awaitingKeyPress;
 	GameObject beatKeyPressText;
 
+	// audio 
+	public AudioSource audioSource;
+	public AudioClip menuSelectSound;
+
+	// Victory
+	GameObject victoryScreen;
+
+
 	void Start () {
 		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
 		gameController.SwitchGameState (GameController.GameState.Combat);
+
+		victoryScreen = GameObject.Find ("VictoryScreen");
+		victoryScreen.SetActive (false);
 
 		StartCoroutine (Combat ());
 		partyController = GameObject.FindGameObjectWithTag ("PartyController").GetComponent<PartyController> ();
@@ -92,6 +103,8 @@ public class CombatController : MonoBehaviour {
 		beatProgressVisual = GameObject.FindGameObjectWithTag ("BeatProgressVisual").GetComponent<BeatProgressVisual>();
 		awaitingKeyPress = false;
 		beatKeyPressText = beatInterface.transform.FindChild ("BeatKeyPressText").gameObject;
+
+		audioSource = this.GetComponent<AudioSource> ();
 
 	}
 		
@@ -238,20 +251,6 @@ public class CombatController : MonoBehaviour {
 					friendlyCounter = 0;
 				}
 			}
-		}
-	}
-
-	// Occurs on Removal of a character from combat
-	// ! currently RESETS turn order on kill and does not take into account who has taken a turn that round
-	public void UpdateTurnOrder (string tag) {
-		if (tag == "NPC") {
-			enemies = GameObject.FindGameObjectsWithTag ("NPC");
-			enemyCounter = 0;
-			enemyCounterMax = enemies.Length;
-		} else {
-			friendlies = GameObject.FindGameObjectsWithTag ("PC");
-			friendlyCounter = 0;
-			friendlyCounterMax = friendlies.Length;
 		}
 	}
 
@@ -491,6 +490,93 @@ public class CombatController : MonoBehaviour {
 
 	}
 
+
+	void EndCombat (bool win) {
+
+		combat = false;
+		selectedAbilityBar.SetActive (false);
+
+		// Disable Rhythm game
+		beatInterface.SetActive (false);
+		rhythmGameActive = false;
+		beatSpawner.isSpawning = false;
+
+		victoryScreen.SetActive (true);
+
+
+		if (win) {
+			StartCoroutine(WinCombat());
+		} else {
+			StartCoroutine(LoseCombat());
+		}
+	}
+
+	IEnumerator WinCombat () {
+
+		// show victory screen
+		victoryScreen.transform.FindChild("Text").GetComponent<Text>().text = "Victory!";
+
+		yield return new WaitForSeconds (0.5f);
+
+		// Award XP / items
+		victoryScreen.transform.FindChild("Reward").GetComponent<Text>().text = "Bone x 3\nTooth x 3\nEssence x 1\nFrozen Heart";
+
+		// add rewards to gamecontroller
+		gameController.SaveRewards();
+
+		yield return new WaitForSeconds (0.5f);
+
+
+		while (!Input.anyKeyDown) {
+			yield return null;
+		}
+
+		gameController.LoadOverworld ();
+
+	}
+
+	IEnumerator LoseCombat () {
+
+		victoryScreen.transform.FindChild("Text").GetComponent<Text>().text = "Lost..";
+
+		yield return new WaitForSeconds (0.5f);
+
+		while (!Input.anyKeyDown) {
+			yield return null;
+		}
+		gameController.ReloadCombat ();
+	
+	}
+
+
+
+	// Occurs on Removal of a character from combat
+	// ! currently RESETS turn order on kill and does not take into account who has taken a turn that round
+	public void UpdateTurnOrder (string tag) {
+		if (tag == "NPC") {
+			enemies = GameObject.FindGameObjectsWithTag ("NPC");
+			if (enemies.Length == 0) {
+				EndCombat (true);
+
+			} else {
+				enemyCounter = 0;
+				enemyCounterMax = enemies.Length;
+			}
+
+
+		} else {
+			friendlies = GameObject.FindGameObjectsWithTag ("PC");
+			if (friendlies.Length == 0) {
+				EndCombat (false);
+			} else {
+
+				friendlyCounter = 0;
+				friendlyCounterMax = friendlies.Length;
+			}
+		}
+	}
+
+
 	void SetupAbilityMenu (GameObject character){
 		selectingAbility = true;
 		string[] abilityArray = activeCharacter.GetComponent<Friendly> ().abilityArray;
@@ -602,6 +688,8 @@ public class CombatController : MonoBehaviour {
 		}
 			
 		target.transform.FindChild("Selected").gameObject.SetActive(true);
+		audioSource.Play ();
+
 	}
 
 	void PreviousTarget () {
@@ -630,6 +718,8 @@ public class CombatController : MonoBehaviour {
 		}
 
 		target.transform.FindChild("Selected").gameObject.SetActive(true);
+		audioSource.Play ();
+
 	}
 
 

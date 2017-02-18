@@ -73,6 +73,8 @@ public class AbilityMenu : MonoBehaviour {
 		currentAbility.GetComponent<Image> ().color = new Color32(0, 0, 0, 255);
 		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(255, 255, 255, 255);
 		combatController.ChangeAbilityDescription ();
+		combatController.audioSource.Play ();
+
 	}
 
 	void Up () {
@@ -87,6 +89,8 @@ public class AbilityMenu : MonoBehaviour {
 		currentAbility.GetComponent<Image> ().color = new Color32(0, 0, 0, 255);
 		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(255, 255, 255, 255);
 		combatController.ChangeAbilityDescription ();
+		combatController.audioSource.Play ();
+
 	}
 
 

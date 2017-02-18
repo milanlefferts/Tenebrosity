@@ -23,7 +23,7 @@ public class PartyController : MonoBehaviour {
 		// Ability Setup
 
 		elizeAbilities = new string[] {"DrainBlood", "UnholyMending"};
-		angeloAbilities = new string[] {"RibCage", "GraveInsult"};
+		angeloAbilities = new string[] {"RibCage"};
 		fredericAbilities = new string[] {"Tear", "Howl"};
 	}
 

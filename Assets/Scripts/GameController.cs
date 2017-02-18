@@ -21,8 +21,29 @@ public class GameController : MonoBehaviour {
 	public bool isPlayerPaused;
 
 	// Save data before Enemy Encounter
+	public string currentScene;
 	public string enemyEncounter;
 	public Vector3 playerPosition;
+
+	// Encounter data
+	public string[] reward;
+
+	// Party Stats
+	int bone;
+	int essence;
+	int tooth;
+
+	int elizeHealthCurrent;
+	int angeloHealthCurrent;
+	int fredericHealthCurrent;
+
+	int elizeHealthMax;
+	int angeloHealthMax;
+	int fredericHealthMax;
+
+	// Inventory
+	GameObject inventory;
+
 
 	void Awake () {
 		if (Instance) {
@@ -36,13 +57,29 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		currentState = GameState.Overworld;
-
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController>();
+
+		if (player == null) {
+			currentState = GameState.Combat;
+
+		} else {
+			currentState = GameState.Overworld;
+
+		}
+
 		backgroundMusic = this.GetComponent<AudioSource> ();
+		inventory = GameObject.FindGameObjectWithTag ("Inventory");
+		inventory.SetActive (false);
 	}
 	
 	void Update () {
+
+		// Open inventory
+
+		if (Input.GetKeyDown (KeyCode.Tab)) {
+			ToggleInventory ();
+		}
+
 		// Restart Game
 		if (Input.GetKeyDown (KeyCode.R)) {
 			SceneManager.LoadScene (0);
@@ -54,6 +91,16 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	void ToggleInventory() {
+		if (inventory.activeSelf) {
+			inventory.SetActive (false);
+			PausePlayer ();
+
+		} else {
+			inventory.SetActive (true);
+			PausePlayer ();
+		}
+	}
 
 	// Freeze the game
 	public void PauseTime () {
@@ -82,6 +129,14 @@ public class GameController : MonoBehaviour {
 	
 	}
 
+	public void LoadOverworld() {
+		SceneManager.LoadScene (currentScene);
+	}
+
+	public void ReloadCombat() {
+		SceneManager.LoadScene ("Scene_Battle");
+	}
+
 
 	public void SwitchGameState (GameState newState){
 		if (currentState != newState) {
@@ -90,16 +145,22 @@ public class GameController : MonoBehaviour {
 			switch(currentState) {
 			case GameState.Overworld:
 
-				//PausePlayer ();
-				// repositions player, destroys enemy
+				// Load scene changes
 				LoadSceneState ();
+
+				// Area music
 				backgroundMusic.clip = music;
 				backgroundMusic.Play ();
+
+				// Find inventory
+				inventory = GameObject.FindGameObjectWithTag ("Inventory");
+				inventory.SetActive (false);
+
 				break;
 
 			case GameState.Combat:
 
-
+				//!commented out for testing combat
 				backgroundMusic.Stop ();
 
 				break;
@@ -118,9 +179,12 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	public void SaveSceneState (string enemy) {
+	public void SaveSceneState (string enemy, string[] spoils) {
+		reward = spoils;
 		enemyEncounter = enemy;
 		playerPosition = player.gameObject.transform.position;
+		currentScene = SceneManager.GetActiveScene().name;
+
 	}
 
 	public void LoadSceneState () {
@@ -128,6 +192,34 @@ public class GameController : MonoBehaviour {
 		enemyEncounter = null;
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController>();
 		player.gameObject.transform.position = playerPosition;
+
+	}
+
+
+
+	public void SaveRewards() {
+		foreach (string rew in reward) {
+			switch (rew) {
+			case "Bone":
+				bone += 1;
+				break;
+			case "Essence":
+				essence += 1;
+				break;
+			case "Tooth":
+				tooth += 1;
+				break;
+			default:
+				// add item to inventory
+				print(reward + " was added to inventory");
+				break;
+			}
+		}
+
+		reward = null;
+	}
+
+	public void SavePlayerStats () {
 
 	}
 
