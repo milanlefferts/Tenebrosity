@@ -5,6 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class EnemyEncounter : MonoBehaviour {
+	
+	GameController gameController;
+
+
 
 	AudioSource audioSource;
 	AsyncOperation async;
@@ -13,11 +17,13 @@ public class EnemyEncounter : MonoBehaviour {
 	GameObject loadingScreen;
 
 	void Start () {
+
 		audioSource = GetComponent<AudioSource> ();
 		isLoading = false;
 		loadingScreen = GameObject.Find ("LoadingScreen");
+		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
 
-		// preload battle screen
+
 		StartCoroutine(LoadScene());
 	}
 
@@ -51,6 +57,9 @@ public class EnemyEncounter : MonoBehaviour {
 
 	void OnTriggerEnter() {
 		if (!isLoading) {
+			// Set this object as the Enemy Encounter and saved player position
+			gameController.SaveSceneState(this.gameObject.name);
+
 			// play enemy battlecry
 			audioSource.Play ();
 			isLoading = true;
@@ -79,6 +88,8 @@ public class EnemyEncounter : MonoBehaviour {
 	}
 
 	IEnumerator TransitionAnimation() {
+		
+		gameController.PausePlayer ();
 
 		// play animation
 		loadingScreen.GetComponent<Animator>().SetTrigger("LoadCombat");

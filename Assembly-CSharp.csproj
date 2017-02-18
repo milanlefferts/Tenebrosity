@@ -65,7 +65,9 @@
      <Compile Include="Assets\Scripts\Combat\StatusText.cs" />
      <Compile Include="Assets\Scripts\DialogueCollider.cs" />
      <Compile Include="Assets\Scripts\EnemyEncounter.cs" />
+     <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\Interactable.cs" />
+     <Compile Include="Assets\Scripts\OverworldController.cs" />
      <Compile Include="Assets\Scripts\PartyController.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\RigidbodyFPS.cs" />

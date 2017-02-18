@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using System.Linq;
 
 public class CombatController : MonoBehaviour {
+
+	GameController gameController;
+
 	
 	bool combat;
 	public GameObject activeCharacter;
@@ -64,6 +67,9 @@ public class CombatController : MonoBehaviour {
 	GameObject beatKeyPressText;
 
 	void Start () {
+		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
+		gameController.SwitchGameState (GameController.GameState.Combat);
+
 		StartCoroutine (Combat ());
 		partyController = GameObject.FindGameObjectWithTag ("PartyController").GetComponent<PartyController> ();
 		abilityController = GameObject.FindGameObjectWithTag ("AbilityController").GetComponent<AbilityController> ();

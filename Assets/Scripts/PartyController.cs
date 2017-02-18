@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class PartyController : MonoBehaviour {
 
-	// UI
-	GameObject UI;
-
 	public int elizeHealthMax;
 	public int angeloHealthMax;
 	public int fredericHealthMax;
@@ -30,17 +27,8 @@ public class PartyController : MonoBehaviour {
 		fredericAbilities = new string[] {"Tear", "Howl"};
 	}
 
-	void Start () {
-		// UI
-		UI = GameObject.FindGameObjectWithTag ("UI");
 
-	}
 
-	void Update () {
-		if (Input.GetKeyDown (KeyCode.R)) {
-			Application.LoadLevel (0);
-		}
-	}
 
 
 
