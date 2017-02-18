@@ -51,14 +51,14 @@ public class PlayerController : MonoBehaviour {
 			currentAnim = "Idle";
 		}
 
-		else if (currentAnim != "Left" && h < 0) {
+		else if (currentAnim != "Left" && (h < 0)) {
 			// left
 			animator.SetTrigger("Left");
 			currentAnim = "Left";
 
 		}
 
-		else if (currentAnim != "Right" && h > 0) {
+		else if (currentAnim != "Right" && (h > 0)) {
 			//right
 			animator.SetTrigger("Right");
 			currentAnim = "Right";

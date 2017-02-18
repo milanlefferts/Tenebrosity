@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class DialogueCollider : MonoBehaviour {
 
-	Interactable interactable;
+	Interactable_Dialogue interactable;
 
 	// Use this for initialization
 	void Start () {
-		interactable = transform.parent.GetComponent<Interactable> ();
+		interactable = transform.parent.GetComponent<Interactable_Dialogue> ();
 	}
 	// Update is called once per frame
 	void Update () {

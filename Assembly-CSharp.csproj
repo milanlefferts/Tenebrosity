@@ -66,15 +66,20 @@
      <Compile Include="Assets\Scripts\DialogueCollider.cs" />
      <Compile Include="Assets\Scripts\EnemyEncounter.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
-     <Compile Include="Assets\Scripts\Interactable.cs" />
+     <Compile Include="Assets\Scripts\Interactable_Dialogue.cs" />
+     <Compile Include="Assets\Scripts\Interactable_Teleport.cs" />
      <Compile Include="Assets\Scripts\OverworldController.cs" />
      <Compile Include="Assets\Scripts\PartyController.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\RigidbodyFPS.cs" />
      <Compile Include="Assets\Scripts\RotateElement.cs" />
      <Compile Include="Assets\Scripts\ShowShadows.cs" />
+     <Compile Include="Assets\Scripts\TeleportCollider.cs" />
      <None Include="Assets\Shaders\$CutoutBumpwithShadows.shader" />
      <None Include="Assets\Shaders\$Sprites-Bumped Diffuse.shader" />
+ <Reference Include="UnityEngine.Advertisements">
+ <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -89,6 +94,9 @@
  </Reference>
  <Reference Include="UnityEngine.HoloLens">
  <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Purchasing">
+ <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.VR">
  <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
