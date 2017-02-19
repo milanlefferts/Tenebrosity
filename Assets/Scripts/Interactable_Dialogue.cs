@@ -73,20 +73,32 @@ public class Interactable_Dialogue : MonoBehaviour {
 	void GetDialogue () {
 		string[] words;
 		switch (this.name) {
-		case "Lakedweller": 
-			lines = new string[] {"Oh it's you again..", "What do you want?"};
+		case "Angelo": 
+			lines = new string[] {"I'm afraid this one\nisn't deep enough", "Guess I'll have to go\na little deeper.."};
 			// assign sound
 			break;
-		case "Angelo": 
-			lines = new string[] {"Hey Jeremy", "Guess you found me!", "Better get back upstairs.."};
+		case "WolfHead": 
+			lines = new string[] {"Do not fear me,\ndo not love me", "Feed me and\nreceive your boon"};
 			// assign sound
 			break;
 		case "Zomboy": 
-			lines =  new string[] {"Have you seen any feet \n lying around?"};
+			lines =  new string[] {"Have you seen any feet \n lying around?", "Mine is stuck in this\nfence, I could use another"};
 			// assign sound
 			break;
-		case "Grave": 
+		case "Grave0": 
 			lines =  new string[] {"Here lies Roderick, \n a man of few words \n and fewer deeds"};
+			// assign sound
+			break;
+		case "Grave1": 
+			lines =  new string[] {"RIP Klink\nSkilled at gunning,\nnot so much at running"};
+			// assign sound
+			break;
+		case "Grave2": 
+			lines =  new string[] {"Who was I?\nI still don't know"};
+			// assign sound
+			break;
+		case "Grave3": 
+			lines =  new string[] {"Do not fear death\nLook at me\nI accepted it!"};
 			// assign sound
 			break;
 		default:

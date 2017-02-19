@@ -39,20 +39,19 @@ public class Interactable_Teleport : MonoBehaviour {
 		case "Hidden Tomb": 
 			teleportLocation = "Graveyard_HiddenTomb";
 			locationName.GetComponent<TextMesh> ().text = this.name;
-
 			break;
-
 		case "Graveyard": 
 			teleportLocation = "Graveyard";
 			locationName.GetComponent<TextMesh> ().text = this.name;
-
+			break;
+		case "Kill(ed)Ville": 
+			teleportLocation = "KilledVille";
+			locationName.GetComponent<TextMesh> ().text = this.name;
 			break;
 		default:
 			teleportLocation = "";
-
 			break;
 		}
-
 	}
 
 
