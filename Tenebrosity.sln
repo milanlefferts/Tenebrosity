@@ -1,7 +1,7 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{9992CD71-4960-A7F1-9D13-527B813ACE95}") = "Tenebrosity", "Assembly-CSharp.csproj", "{C0D21C24-95F3-1B5A-05CB-60AA67791DA4}"
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tenebrosity", "Tenebrosity.csproj", "{C34CBFD7-7874-7FAC-0B34-A7AA23D1A262}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,15 +9,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C0D21C24-95F3-1B5A-05CB-60AA67791DA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0D21C24-95F3-1B5A-05CB-60AA67791DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0D21C24-95F3-1B5A-05CB-60AA67791DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0D21C24-95F3-1B5A-05CB-60AA67791DA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C34CBFD7-7874-7FAC-0B34-A7AA23D1A262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C34CBFD7-7874-7FAC-0B34-A7AA23D1A262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C34CBFD7-7874-7FAC-0B34-A7AA23D1A262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C34CBFD7-7874-7FAC-0B34-A7AA23D1A262}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 EndGlobal

@@ -304,7 +304,7 @@ public class AbilityController : MonoBehaviour {
 	// LakeDweller
 
 	public void Slam () {
-		InflictDamage (combatController.targets, 8, 0, "Organic");
+		InflictDamage (combatController.targets, 15, 0, "Organic");
 
 		//Heal (combatController.targets, 5);
 	}
@@ -325,7 +325,7 @@ public class AbilityController : MonoBehaviour {
 
 	// Heartseeker
 	public void Peck () {
-		InflictDamage (combatController.targets, 5, 0, "Undying");
+		InflictDamage (combatController.targets, 10, 0, "Undying");
 
 		//Heal (combatController.targets, 5);
 	}
@@ -335,7 +335,7 @@ public class AbilityController : MonoBehaviour {
 		rhythmGameController.beatHitsRequired = 6f;
 		rhythmGameController.beatSpawnedTotal = 10;
 		rhythmGameController.beatSpawnSpeed = 1f;
-		rhythmGameController.beatTravelSpeed = 120f;
+		rhythmGameController.beatTravelSpeed = 160f;
 
 		// Load correct Rhythm Game Animator
 		//rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load("Animators/Defend") as RuntimeAnimatorController;
@@ -457,6 +457,7 @@ public class AbilityController : MonoBehaviour {
 
 	public void Tear () {
 		InflictStatus (combatController.targets, "DoT", 3);
+		InflictDamage (combatController.targets, 4, 0, "Tainted");
 
 	}
 

@@ -68,12 +68,12 @@ public class Enemy : MonoBehaviour {
 	void SetAbilities () {
 		switch (this.name) {
 		case "Lakedweller":
-			health = 0;
+			health = 4;
 			type = "Tainted";
 			abilityArray = new string[] {"Slam"};
 			break;
 		case "Heartseeker":
-			health = 5;
+			health = 1;
 			type = "Undying";
 			abilityArray = new string[] {"Peck"};
 			break;

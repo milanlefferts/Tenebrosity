@@ -77,6 +77,10 @@ public class Interactable_Dialogue : MonoBehaviour {
 			lines = new string[] {"Oh it's you again..", "What do you want?"};
 			// assign sound
 			break;
+		case "Angelo": 
+			lines = new string[] {"Hey Jeremy", "Guess you found me!", "Better get back upstairs.."};
+			// assign sound
+			break;
 		case "Zomboy": 
 			lines =  new string[] {"Have you seen any feet \n lying around?"};
 			// assign sound

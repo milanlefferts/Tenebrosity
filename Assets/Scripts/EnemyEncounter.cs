@@ -42,8 +42,8 @@ public class EnemyEncounter : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter() {
-		if (!isLoading) {
+	void OnTriggerEnter(Collider collider) {
+		if (!isLoading && collider.tag == "Player") {
 			// Set this object as the Enemy Encounter and saved player position
 			gameController.SaveSceneState(this.gameObject.name, rewards);
 

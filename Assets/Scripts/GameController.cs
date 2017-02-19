@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour {
 
 	AudioSource backgroundMusic;
 	public AudioClip music;
+	public AudioClip hiddentombMusic;
 
 	public bool isTimePaused;
 	public bool isPlayerPaused;
@@ -42,7 +43,7 @@ public class GameController : MonoBehaviour {
 	int fredericHealthMax;
 
 	// Inventory
-	GameObject inventory;
+	public GameObject inventory;
 
 
 	void Awake () {
@@ -54,6 +55,8 @@ public class GameController : MonoBehaviour {
 		}
 
 	}
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -68,8 +71,8 @@ public class GameController : MonoBehaviour {
 		}
 
 		backgroundMusic = this.GetComponent<AudioSource> ();
-		inventory = GameObject.FindGameObjectWithTag ("Inventory");
-		inventory.SetActive (false);
+		//inventory = GameObject.FindGameObjectWithTag ("Inventory");
+		//inventory.SetActive (false);
 	}
 	
 	void Update () {
@@ -89,9 +92,25 @@ public class GameController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.P)) {
 			PauseTime ();
 		}
+
+	}
+
+	void OnEnable() {
+		SceneManager.sceneLoaded += this.OnLoadLevelFinishedLoading;
+	}
+
+	void OnLoadLevelFinishedLoading(Scene scene, LoadSceneMode mode) {
+		inventory = GameObject.FindGameObjectWithTag ("Inventory");
+		inventory.SetActive (false);
+		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController>();
+
 	}
 
 	void ToggleInventory() {
+		
+		//inventory = GameObject.FindGameObjectWithTag ("UI").GetComponentInChildren<Inventory>().gameObject;
+		
+
 		if (inventory.activeSelf) {
 			inventory.SetActive (false);
 			PausePlayer ();

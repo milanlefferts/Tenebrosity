@@ -13,6 +13,7 @@ public class AbilityMenu : MonoBehaviour {
 	GameObject ability4;
 	GameObject ability5;
 	GameObject ability6;
+	public GameObject[] abilityEntries;
 
 	public List<GameObject> abilities = new List<GameObject>();
 
@@ -20,6 +21,17 @@ public class AbilityMenu : MonoBehaviour {
 
 	public int currentAbilityNr;
 	CombatController combatController;
+
+	void Awake() {
+		ability1 = transform.FindChild("1").gameObject;
+		ability2 = transform.FindChild("2").gameObject;
+		ability3 = transform.FindChild("3").gameObject;
+		ability4 = transform.FindChild("4").gameObject;
+		ability5 = transform.FindChild("5").gameObject;
+		ability6 = transform.FindChild("6").gameObject;
+		abilityEntries = new GameObject[] {ability1, ability2, ability3, ability4, ability5, ability6};
+
+	}
 
 	void Start () {
 		//
@@ -38,6 +50,7 @@ public class AbilityMenu : MonoBehaviour {
 	}
 
 	public void DetermineAbilities () {
+
 		
 		ability1 = transform.FindChild("1").gameObject;
 		ability2 = transform.FindChild("2").gameObject;
@@ -45,6 +58,8 @@ public class AbilityMenu : MonoBehaviour {
 		ability4 = transform.FindChild("4").gameObject;
 		ability5 = transform.FindChild("5").gameObject;
 		ability6 = transform.FindChild("6").gameObject;
+
+		abilities.Clear ();
 
 		GameObject[] menuEntries = new GameObject[] {ability1, ability2, ability3, ability4, ability5, ability6};
 
@@ -64,7 +79,7 @@ public class AbilityMenu : MonoBehaviour {
 	void Down () {
 		currentAbility.GetComponent<Image> ().color = new Color32(255, 255, 255, 100);
 		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(0, 0, 0, 255);
-		if (currentAbilityNr < abilities.Count - 1) {
+		if (currentAbilityNr < abilities.Count - 1 && abilities.Count > 1) {
 			currentAbilityNr += 1;
 		} else {
 			currentAbilityNr = 0;
@@ -80,7 +95,10 @@ public class AbilityMenu : MonoBehaviour {
 	void Up () {
 		currentAbility.GetComponent<Image> ().color = new Color32(255, 255, 255, 100);
 		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(0, 0, 0, 255);
-		if (currentAbilityNr > 0) {
+		if (abilities.Count == 1) {
+			currentAbilityNr = 0;
+		}
+		else if (currentAbilityNr > 0) {
 			currentAbilityNr -= 1;
 		} else {
 			currentAbilityNr = abilities.Count - 1;

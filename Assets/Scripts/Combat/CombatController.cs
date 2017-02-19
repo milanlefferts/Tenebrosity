@@ -122,7 +122,7 @@ public class CombatController : MonoBehaviour {
 		
 		// Selects an ability and starts target selection
 		if (selectingAbility) {
-			if (Input.GetKeyDown(KeyCode.Return)) {
+			if (Input.GetKeyDown(KeyCode.E)) {
 				abilityMenu.SetActive (false);
 				selectedAbilityBar.transform.FindChild ("AbilityName").GetComponent<Text> ().text = abilityMenu.GetComponent<AbilityMenu> ().currentAbility.transform.FindChild ("AbilityName").GetComponent<Text> ().text;
 
@@ -172,7 +172,7 @@ public class CombatController : MonoBehaviour {
 				selectedAbilityBar.SetActive (false);
 			}
 	
-			if (Input.GetKeyDown(KeyCode.Return)) {
+			if (Input.GetKeyDown(KeyCode.E)) {
 					// Clear pointers Targets
 					foreach (GameObject enemy in enemies) {
 						enemy.GetComponent<Enemy> ().selectedPointer.SetActive (false);
@@ -578,6 +578,12 @@ public class CombatController : MonoBehaviour {
 
 
 	void SetupAbilityMenu (GameObject character){
+
+		// clear ability menu
+		foreach (GameObject abi in abilityMenu.GetComponent<AbilityMenu>().abilityEntries) {
+			abi.SetActive (false);
+		}
+
 		selectingAbility = true;
 		string[] abilityArray = activeCharacter.GetComponent<Friendly> ().abilityArray;
 		//string[] abilityArray = partyController.GetAbilities (character.name);
