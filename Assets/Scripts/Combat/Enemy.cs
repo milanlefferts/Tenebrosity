@@ -103,13 +103,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void Death () {
-		//SpawnText ("Death");
-
 		isDead = true;
-
-		// store relevant data
-
-		// save experience / item drops
 
 		// Death animation
 		this.transform.FindChild("Sprite").gameObject.GetComponent<Animator>().SetTrigger("Death");
@@ -123,8 +117,6 @@ public class Enemy : MonoBehaviour {
 		// Adjust turn order
 		this.gameObject.tag = "Untagged";
 		combatController.UpdateTurnOrder ("NPC");
-
-
 	}
 
 	public void CheckDeathThroes (string attackerAbilityType) {
@@ -133,7 +125,6 @@ public class Enemy : MonoBehaviour {
 			SpawnText ("Weakness!");
 			deathThroes += 1;
 			deathThroesIcon.GetComponent<SpriteRenderer>().sprite = abilityController.statusIcons [2];
-
 		}
 	}
 
@@ -177,7 +168,11 @@ public class Enemy : MonoBehaviour {
 
 	}
 
-	public void InflictStatus (string stat, int dur) {
+	public void InflictStatus (string stat, int dur, string type) {
+		if (combatController.activeCharacter.tag == "PC") {
+			CheckDeathThroes (type);
+		}
+
 		status = stat;
 		duration = dur;
 		SpawnText (stat);
@@ -198,7 +193,7 @@ public class Enemy : MonoBehaviour {
 			statusIcon.GetComponent<SpriteRenderer>().sprite = abilityController.statusIcons [1];
 			break;
 		case "DefMin":
-			statusIcon.GetComponent<SpriteRenderer>().sprite = abilityController.statusIcons [1];
+			statusIcon.GetComponent<SpriteRenderer>().sprite = abilityController.statusIcons [3];
 			break;
 			/*
 

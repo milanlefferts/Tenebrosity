@@ -121,7 +121,7 @@ public class RhythmGameController : MonoBehaviour {
 			//beatHits += update;
 
 		} else {
-			beatHits -= 1;
+			//beatHits -= 1;
 		}
 
 		if (beatHits < 0) {

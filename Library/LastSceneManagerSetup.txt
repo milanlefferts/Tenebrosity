@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Graveyard.unity
+- path: Assets/Scenes/ParishOfThePerished.unity
   isLoaded: 1
   isActive: 1

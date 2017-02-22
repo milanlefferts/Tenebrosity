@@ -60,11 +60,11 @@ public class AbilityController : MonoBehaviour {
 		Action graveInsult = GraveInsult;
 		Action ribCage = RibCage;
 		Action shoulderBlade = ShoulderBlade;
-		Action skullCracker = SkullCracker;
+		Action skullCracker = Skullcracker;
 		Action graveInsult_rS = GraveInsult_rS;
 		Action ribCage_rS = RibCage_rS;
 		Action shoulderBlade_rS = ShoulderBlade_rS;
-		Action skullCracker_rS = SkullCracker_rS;
+		Action skullCracker_rS = Skullcracker_rS;
 
 		Action tear = Tear;
 		Action pounce = Pounce;
@@ -161,8 +161,8 @@ public class AbilityController : MonoBehaviour {
 			ribCage_rS
 		));
 
-		abilityDictionary.Add ("SkullCracker", new Ability(
-			"SkullCracker", 
+		abilityDictionary.Add ("Skullcracker", new Ability(
+			"Skullcracker", 
 			"Cause alarming fractures, increasing enemy damage taken",
 			"Enemy",
 			"Organic",
@@ -275,16 +275,16 @@ public class AbilityController : MonoBehaviour {
 		}
 	}
 
-	public void InflictStatus (GameObject[] targets, string status, int duration) {
+	public void InflictStatus (GameObject[] targets, string status, int duration, string type) {
 		foreach (GameObject target in targets) {
 			// Player Character
 			if (target.tag == "PC") {
-				target.GetComponent<Friendly> ().InflictStatus (status, duration);
+				target.GetComponent<Friendly> ().InflictStatus (status, duration, type);
 			}
 
 			// Enemy Character
 			else if (target.tag == "NPC") {
-				target.GetComponent<Enemy> ().InflictStatus (status, duration);
+				target.GetComponent<Enemy> ().InflictStatus (status, duration, type);
 
 			}
 		}
@@ -387,14 +387,14 @@ public class AbilityController : MonoBehaviour {
 	}
 
 	public void Debilitate () {
-		InflictStatus (combatController.targets, "Debuff: Defense", 3);
+		InflictStatus (combatController.targets, "Debuff: Defense", 3, "Tainted");
 	}
 
 	public void Debilitate_rS() {
 	}
 
 	public void QuickeningPulse () {
-		InflictStatus (combatController.targets, "Buff: Haste", 1);
+		InflictStatus (combatController.targets, "Buff: Haste", 1, "Tainted");
 	}
 
 	public void QuickeningPulse_rS () {
@@ -408,15 +408,33 @@ public class AbilityController : MonoBehaviour {
 	}
 
 	public void GraveInsult () {
-		InflictStatus (combatController.targets, "Taunt", 3);
+		InflictStatus (combatController.targets, "Taunt", 3, "Organic");
 	}
 
-	public void SkullCracker () {
-		InflictStatus (combatController.targets, "Debuff: Defense", 3);
+	public void Skullcracker () {
+		InflictDamage (combatController.targets, 10, 5, "Undying");
+		InflictStatus (combatController.targets, "Debuff: Defense", 3, "Undying");
 	}
+
+	public void Skullcracker_rS () {
+		// Set Beat information
+		rhythmGameController.beatHitsRequired = 5f;
+		rhythmGameController.beatSpawnedTotal = 10;
+		rhythmGameController.beatSpawnSpeed = 1f;
+		rhythmGameController.beatTravelSpeed = 180f;
+
+		// Load correct Rhythm Game Animator
+		rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load("Animators/Skullcracker") as RuntimeAnimatorController;
+		rhythmGameController.beatVisualAnimationStates = 1f;
+
+		//combatController.activeCharacter.transform.FindChild("Sprite").gameObject.GetComponent<Animator>().SetTrigger(combatController.selectedAbility.name);
+
+
+	}
+
 		
 	public void RibCage () {
-		InflictStatus (combatController.targets, "DefPlus", 3);
+		InflictStatus (combatController.targets, "DefPlus", 3, "Undying");
 
 		//Heal (combatController.targets, 5);
 	}
@@ -443,12 +461,9 @@ public class AbilityController : MonoBehaviour {
 	}
 
 	public void GraveInsult_rS () {
-		InflictStatus (combatController.targets, "Taunt", 3);
+		InflictStatus (combatController.targets, "Taunt", 3, "Undying");
 	}
 
-	public void SkullCracker_rS () {
-		InflictStatus (combatController.targets, "Debuff: Defense", 3);
-	}
 
 
 
@@ -456,7 +471,7 @@ public class AbilityController : MonoBehaviour {
 	// -------------------------------------------------------------------------------------------------------------
 
 	public void Tear () {
-		InflictStatus (combatController.targets, "DoT", 3);
+		InflictStatus (combatController.targets, "DoT", 3, "Organic");
 		InflictDamage (combatController.targets, 4, 0, "Tainted");
 
 	}
@@ -479,7 +494,7 @@ public class AbilityController : MonoBehaviour {
 
 	public void LickWounds () {
 		Heal (combatController.targets, 20);
-		InflictStatus (combatController.targets, "Debuff: Defense", 1);
+		InflictStatus (combatController.targets, "Debuff: Defense", 1, "Organic");
 	}
 
 	public void Pounce () {
@@ -490,7 +505,7 @@ public class AbilityController : MonoBehaviour {
 
 
 	public void Howl () {
-		InflictStatus (combatController.targets, "DefMin", 3);
+		InflictStatus (combatController.targets, "DefMin", 3, "Organic");
 	}
 
 	public void Howl_rS () {
@@ -508,7 +523,7 @@ public class AbilityController : MonoBehaviour {
 
 	public void LickWounds_rS () {
 		Heal (combatController.targets, 20);
-		InflictStatus (combatController.targets, "Debuff: Defense", 1);
+		InflictStatus (combatController.targets, "Debuff: Defense", 1, "Organic");
 	}
 
 	public void Pounce_rS () {

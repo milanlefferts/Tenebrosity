@@ -39,6 +39,8 @@ public class BeatIndicator : MonoBehaviour {
 	public bool isFirst;
 	bool isBeingDestroyed;
 
+	bool hasBeenHit;
+
 	//
 	BeatSpawner beatSpawner;
 
@@ -48,6 +50,7 @@ public class BeatIndicator : MonoBehaviour {
 	RhythmGameController rhythmGameController;
 	//CombatController combatController;
 
+	KeyCode input;
 
 	void Awake () {
 		KeyPress = new UnityEvent ();
@@ -55,15 +58,13 @@ public class BeatIndicator : MonoBehaviour {
 
 	void Start () {
 
-
-
 		rhythmGameController = GameObject.FindGameObjectWithTag ("RhythmGameController").GetComponent<RhythmGameController>();
 		//combatController = GameObject.FindGameObjectWithTag ("CombatController").GetComponent<CombatController> ();
 
 
 		// left, up, down, right
 		keyCodes = new KeyCode[] {KeyCode.LeftArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.RightArrow};
-		directionSprites = new Sprite[] {beatIndicatorLeft, beatIndicatorUp, beatIndicatorDown, beatIndicatorRight};
+		directionSprites = new Sprite[] {beatIndicatorLeft, beatIndicatorUp, beatIndicatorDown, beatIndicatorRight, beatIndicatorEmpty};
 
 		direction1 = this.GetComponent<RectTransform>().FindChild ("Direction1Sprite").GetComponent<Image> ();
 		direction2 = this.GetComponent<RectTransform>().FindChild ("Direction2Sprite").GetComponent<Image> ();
@@ -93,34 +94,47 @@ public class BeatIndicator : MonoBehaviour {
 			key2Pressed = false;
 		}
 
+		if (Input.anyKeyDown) {
+
+		}
+
 		if (isFirst) {
-			// Two Keys
+				// Two Keys
 			if (twoKeys) {
-				if (Input.GetKeyDown (key1) && !key2Pressed) {
+				// detect second key
+				if (Input.GetKeyDown (key2) && key1Pressed ||
+				    Input.GetKeyDown (key2) && Input.GetKeyDown (key1) ||
+				    Input.GetKeyDown (key1) && key2Pressed) {
+					ResolveKeyPress ();
+				}
+				// detect first key
+				else if (Input.GetKeyDown (key1) && !key2Pressed) {
 					key1Pressed = true;
 					rhythmGameController.buttonPressed = Time.time + rhythmGameController.buttonWindow;
-				} 
-				else if (Input.GetKeyDown (key2) && !key1Pressed) {
+				} else if (Input.GetKeyDown (key2) && !key1Pressed) {
 					key2Pressed = true;
 					rhythmGameController.buttonPressed = Time.time + rhythmGameController.buttonWindow;
+				} else if (Input.anyKeyDown) {
+					print ("FAIL two");
+					rhythmGameController.UpdateBeatHits (-1);
 				}
-
-				if (Input.GetKeyDown (key2) && key1Pressed || Input.GetKeyDown (key2) && Input.GetKeyDown (key1)) {
-					ResolveKeyPress ();
-				} 
-				else if (Input.GetKeyDown (key1) && key2Pressed) {
-					ResolveKeyPress ();
-				}
-
 			}
-		
-			// One Key
+				// One Key
 			else {
-				if (Input.GetKeyDown (key1)) {
-					ResolveKeyPress ();
+				if (Input.anyKeyDown) {
+					if (input == key1) {
+						print ("YEAH one");
+						ResolveKeyPress ();
+					} else if (input != key1) {
+						print ("FAIL one");
+						rhythmGameController.UpdateBeatHits (-1);
+					}
 				}
+
+	
+
 			}
-		
+			
 		} // end isFirst
 
 		// Movement towards beatTarget
@@ -130,11 +144,15 @@ public class BeatIndicator : MonoBehaviour {
 
 	}
 
+	void OnGUI() {
+		input = Event.current.keyCode;
+	}
+
 	void GenerateKeys() {
 		// Determine the amount of keys (one or two)
-		int rand = Random.Range (0, 4);
+		int rand = Random.Range (0, 10);
 
-		if (rand > 2) {
+		if (rand > 7) {
 			twoKeys = true;
 		} else {
 			twoKeys = false;
@@ -143,6 +161,7 @@ public class BeatIndicator : MonoBehaviour {
 		// generate first random key
 		int one = Random.Range (0, 4);
 		direction1.sprite = directionSprites [one];
+		direction2.sprite = directionSprites [4];
 		key1 = keyCodes [one];
 
 		// check if a second key must be generated
@@ -161,8 +180,6 @@ public class BeatIndicator : MonoBehaviour {
 
 	void ResolveKeyPress () {
 		// If key press is resolved correctly: 
-
-
 		if (isFirst) {
 			if (touchingInner) {
 				ResolveKeyPress_RemoveObj (3);
@@ -177,7 +194,7 @@ public class BeatIndicator : MonoBehaviour {
 			// if player mistake
 			else {
 				rhythmGameController.UpdateBeatHits (-1);
-
+				print ("good key, too soon");
 			}
 		}
 	}

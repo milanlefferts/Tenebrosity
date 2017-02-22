@@ -10,11 +10,11 @@ public class PlayerController : MonoBehaviour {
 
 	float h;
 	float v;
-	Animator animator;
+	public Animator animator;
 	string currentAnim;
 
 	CharacterController controller;
-	//Rigidbody rb;
+	public GameObject item;
 
 	void Start() {
 		speed = 10.0f;
@@ -23,9 +23,7 @@ public class PlayerController : MonoBehaviour {
 		animator = this.gameObject.GetComponentInChildren<Animator> ();
 		currentAnim = "Idle";
 		controller = GetComponent<CharacterController>();
-		//controller.detectCollisions = false;
-		//rb = GetComponent<Rigidbody>();
-
+		item = this.gameObject.transform.Find("Item").gameObject;
 	}
 
 	void Update() {
@@ -38,8 +36,6 @@ public class PlayerController : MonoBehaviour {
 				moveDirection.y = jumpSpeed;
 			// play jump animation
 		}
-
-
 
 		h = Input.GetAxis("Horizontal");
 		v = Input.GetAxis("Vertical");
@@ -55,16 +51,13 @@ public class PlayerController : MonoBehaviour {
 			// left
 			animator.SetTrigger("Left");
 			currentAnim = "Left";
-
 		}
 
 		else if (currentAnim != "Right" && (h > 0)) {
 			//right
 			animator.SetTrigger("Right");
 			currentAnim = "Right";
-
 		}
-			
 
 		moveDirection.y -= gravity * Time.deltaTime;
 		controller.Move(moveDirection * Time.deltaTime);

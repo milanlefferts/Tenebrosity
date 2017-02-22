@@ -76,7 +76,7 @@ public class CombatController : MonoBehaviour {
 
 	void Start () {
 		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
-		gameController.SwitchGameState (GameController.GameState.Combat);
+		//gameController.SwitchGameState (GameController.GameState.Combat);
 
 		victoryScreen = GameObject.Find ("VictoryScreen");
 		victoryScreen.SetActive (false);

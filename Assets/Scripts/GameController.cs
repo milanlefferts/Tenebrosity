@@ -107,10 +107,6 @@ public class GameController : MonoBehaviour {
 	}
 
 	void ToggleInventory() {
-		
-		//inventory = GameObject.FindGameObjectWithTag ("UI").GetComponentInChildren<Inventory>().gameObject;
-		
-
 		if (inventory.activeSelf) {
 			inventory.SetActive (false);
 			PausePlayer ();
@@ -218,6 +214,8 @@ public class GameController : MonoBehaviour {
 
 	public void SaveRewards() {
 		foreach (string rew in reward) {
+			print(rew + " was picked up");
+
 			switch (rew) {
 			case "Bone":
 				bone += 1;
@@ -237,6 +235,12 @@ public class GameController : MonoBehaviour {
 
 		reward = null;
 	}
+
+	public void PickupObject(string name) {
+		reward = new string[] { name };
+		SaveRewards ();
+	}
+		
 
 	public void SavePlayerStats () {
 

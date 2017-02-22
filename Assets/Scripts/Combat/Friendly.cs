@@ -197,7 +197,11 @@ public class Friendly : MonoBehaviour {
 		audioSource.Play ();
 	}
 
-	public void InflictStatus (string stat, int dur) {
+	public void InflictStatus (string stat, int dur, string type) {
+		if (combatController.activeCharacter.tag == "NPC") {
+			CheckDeathThroes (type);
+		}
+
 		status = stat;
 		duration = dur;
 		//print (this.name + " was inflicted by " + stat);
@@ -217,10 +221,10 @@ public class Friendly : MonoBehaviour {
 		case "DefPlus":
 			statusIcon.GetComponent<SpriteRenderer>().sprite = abilityController.statusIcons [1];
 			break;
-			/*
 		case "DefMin":
-			statusIcon.GetComponent<SpriteRenderer>().sprite = abilityController.statusIcons [0];
+			statusIcon.GetComponent<SpriteRenderer>().sprite = abilityController.statusIcons [3];
 			break;
+			/*
 		case "DamPlus":
 			statusIcon.GetComponent<SpriteRenderer>().sprite = abilityController.statusIcons [0];
 
