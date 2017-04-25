@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Spawns, moves and then destroys a blood drop after taking damage.
 public class DamageBlooddrop : MonoBehaviour {
-
-	// Use this for initialization
 	void Start () {
 		StartCoroutine (Implode());
 		StartCoroutine (MoveDamage());

@@ -1,13 +1,8 @@
-﻿<Properties StartupItem="Tenebrosity.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Combat\CombatController.cs">
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Combat\AbilityMenu.cs">
     <Files>
-      <File FileName="Assets\Scripts\GameController.cs" Line="177" Column="5" />
-      <File FileName="Assets\Scripts\Combat\CombatController.cs" Line="74" Column="27" />
-      <File FileName="Assets\Scripts\BeatGame\BeatProgressVisual.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PickupObject.cs" Line="18" Column="53" />
-      <File FileName="Assets\Scripts\PlayerController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Combat\AbilityController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Combat\AbilityMenu.cs" Line="3" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

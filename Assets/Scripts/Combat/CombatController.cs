@@ -6,31 +6,24 @@ using System.Linq;
 
 public class CombatController : MonoBehaviour {
 
-	GameController gameController;
+	private GameController gameController;
 
-	
 	bool combat;
 	public GameObject activeCharacter;
-	GameObject[] enemies;
-	GameObject[] friendlies;
+	public GameObject[] enemies, friendlies;
 
-	Vector3 activeCharacterPos;
+	public Vector3 activeCharacterPos;
 
 	// Turn Order
 	public bool turnInProgress;
-	int enemyCounter;
-	int enemyCounterMax;
-	int friendlyCounter;
-	int friendlyCounterMax;
+	int enemyCounter, enemyCounterMax;
+	int friendlyCounter, friendlyCounterMax;
 
 	//Ability Use
-	GameObject abilityMenu;
-	PartyController partyController;
 	public bool selectingAbility;
-	GameObject selectedAbilityBar;
+	private GameObject abilityMenu, selectedAbilityBar, abilityDescription;
 	public Ability selectedAbility;
-	GameObject abilityDescription;
-	AbilityController abilityController;
+	private AbilityController abilityController;
 
 	// Selection
 	public string targetingMode;
@@ -40,12 +33,11 @@ public class CombatController : MonoBehaviour {
 	public GameObject target;
 
 	// Combat Positions
-	Vector3 PCPos;
-	Vector3 NPCPos;
+	private Vector3 PCPos, NPCPos;
 
 	// Enemy Targeting
-	List<GameObject> targetList = new List<GameObject>();
-	List<GameObject> characterList = new List<GameObject>();
+	private List<GameObject> targetList = new List<GameObject>();
+	private List<GameObject> characterList = new List<GameObject>();
 	public GameObject[] targets;
 	bool targetIsMoving;
 
@@ -56,33 +48,38 @@ public class CombatController : MonoBehaviour {
 
 	//public GameObject[] targets;
 
-	// Beat Game
-	GameObject beatInterface;
-	RhythmGameController rhythmGameController;
-	BeatProgressVisual beatProgressVisual;
-	Vector3 oldTargetPos;
+	// Rhythm/Beat Game
+	private GameObject beatInterface;
+	private RhythmGameController rhythmGameController;
+	private BeatProgressVisual beatProgressVisual;
+	private Vector3 oldTargetPos;
 	public bool rhythmGameActive;
-	BeatSpawner beatSpawner;
+	private BeatSpawner beatSpawner;
 	bool awaitingKeyPress;
-	GameObject beatKeyPressText;
+	private GameObject beatKeyPressText;
 
 	// audio 
 	public AudioSource audioSource;
 	public AudioClip menuSelectSound;
 
 	// Victory
-	GameObject victoryScreen;
-
+	private GameObject victoryScreen;
 
 	void Start () {
 		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
 		gameController.SwitchGameState (GameController.GameState.Combat);
 
+		audioSource = this.GetComponent<AudioSource> ();
+
 		victoryScreen = GameObject.Find ("VictoryScreen");
 		victoryScreen.SetActive (false);
 
+		// Combat
 		StartCoroutine (Combat ());
-		partyController = GameObject.FindGameObjectWithTag ("PartyController").GetComponent<PartyController> ();
+		PCPos = new Vector3 (-45f, 1f, -2f);
+		NPCPos = new Vector3 (-55f, 1.3f, -2.5f);
+
+		// Ability Selection
 		abilityController = GameObject.FindGameObjectWithTag ("AbilityController").GetComponent<AbilityController> ();
 		abilityMenu = GameObject.Find ("AbilityMenu");
 		abilityMenu.SetActive (false);
@@ -90,22 +87,14 @@ public class CombatController : MonoBehaviour {
 		selectedAbilityBar.SetActive (false);
 		abilityDescription = GameObject.Find ("AbilityDescription");
 		abilityDescription.SetActive (false);
-		//UI = GameObject.FindGameObjectWithTag ("UI");
 
-		// Combat Positions
-		PCPos = new Vector3 (-45f, 1f, -2f);
-		NPCPos = new Vector3 (-55f, 1.3f, -2.5f);
-
-		// BeatGame
+		// Rhythm/Beat Game
 		beatInterface = GameObject.FindGameObjectWithTag ("BeatInterface");
 		beatSpawner = GameObject.FindGameObjectWithTag ("BeatSpawner").GetComponent<BeatSpawner>();
 		rhythmGameController = GameObject.FindGameObjectWithTag ("RhythmGameController").GetComponent<RhythmGameController>();
 		beatProgressVisual = GameObject.FindGameObjectWithTag ("BeatProgressVisual").GetComponent<BeatProgressVisual>();
 		awaitingKeyPress = false;
 		beatKeyPressText = beatInterface.transform.FindChild ("BeatKeyPressText").gameObject;
-
-		audioSource = this.GetComponent<AudioSource> ();
-
 	}
 		
 	// Determines what targets should be selected by the Ability
@@ -115,87 +104,82 @@ public class CombatController : MonoBehaviour {
 	}
 
 	void Update () {
-
-		if (awaitingKeyPress && Input.anyKeyDown) {
-			awaitingKeyPress = false;
-		}
-		
 		// Selects an ability and starts target selection
 		if (selectingAbility) {
 			if (Input.GetKeyDown(KeyCode.E)) {
-				abilityMenu.SetActive (false);
-				selectedAbilityBar.transform.FindChild ("AbilityName").GetComponent<Text> ().text = abilityMenu.GetComponent<AbilityMenu> ().currentAbility.transform.FindChild ("AbilityName").GetComponent<Text> ().text;
-
-				selectedAbility = abilityController.abilityDictionary [selectedAbilityBar.transform.FindChild ("AbilityName").GetComponent<Text> ().text];
-				selectedAbilityBar.transform.FindChild ("AbilityType").GetComponent<Image> ().color = ChangeAbilityTypeColor (selectedAbility.type);
-
-				selectedAbilityBar.SetActive (true);
-
-				// Reset AbilityMenu color
-				foreach (GameObject obj in abilityMenu.GetComponent<AbilityMenu>().abilities) {
-					obj.GetComponent<Image> ().color = new Color32(255, 255, 255, 100);
-					obj.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(0, 0, 0, 255);
-				}
-
-
-				SetTargetingMode (selectedAbility.target);
-
-				InitiateTargetSelection ();
+				SelectAbilityMenu ();
 			}
 		}
-
-		// Cycles through targets and selects on Enter
+		// Cycles through targets and selects on Enter, Backspace return to previous menu
 		else if (selectingTarget) {
 			if (Input.GetKeyDown(KeyCode.LeftArrow)) {
 				PreviousTarget ();
 			}
-
 			if (Input.GetKeyDown (KeyCode.RightArrow)) {
 				NextTarget ();
 			}
-
 			if (Input.GetKeyDown (KeyCode.Backspace)) {
-
-				abilityMenu.SetActive (true);
-
-				selectingAbility = true;
-				selectingTarget = false;
-
-				// Clear pointers Targets
-				foreach (GameObject enemy in enemies) {
-					enemies [currentEnemyNr].GetComponent<Enemy> ().selectedPointer.SetActive (false);
-				}
-
-				foreach (GameObject enemy in enemies) {
-					friendlies [currentEnemyNr].transform.FindChild("Selected").gameObject.SetActive(false);
-				}
-				selectedAbilityBar.SetActive (false);
+				ReturnToSelectAbilityMenu ();
 			}
-	
 			if (Input.GetKeyDown(KeyCode.E)) {
-					// Clear pointers Targets
-					foreach (GameObject enemy in enemies) {
-						enemy.GetComponent<Enemy> ().selectedPointer.SetActive (false);
-					}
-
-					foreach (GameObject friend in friendlies) {
-						friend.transform.FindChild("Selected").gameObject.SetActive(false);
-					}
-
-					// Setup targets
-					targets = new GameObject[] { target };
-
-					// # Beat Game #
-				StartCoroutine(InitiateBeatGame ());
-
+				ConfirmedTarget ();
 			}
-
 		}
 
-	} // End of Update
+		// Allow player to continue to Rhythm Game on keypress
+		if (awaitingKeyPress && Input.anyKeyDown) {
+			awaitingKeyPress = false;
+		}
+	}
 
+	// Open Select Ability Menu
+	void SelectAbilityMenu() {
+		abilityMenu.SetActive (false);
+		selectedAbilityBar.transform.FindChild ("AbilityName").GetComponent<Text> ().text = abilityMenu.GetComponent<AbilityMenu> ().currentAbility.transform.FindChild ("AbilityName").GetComponent<Text> ().text;
 
+		selectedAbility = abilityController.abilityDictionary [selectedAbilityBar.transform.FindChild ("AbilityName").GetComponent<Text> ().text];
+		selectedAbilityBar.transform.FindChild ("AbilityType").GetComponent<Image> ().color = ChangeAbilityTypeColor (selectedAbility.type);
 
+		selectedAbilityBar.SetActive (true);
+
+		// Reset AbilityMenu color
+		foreach (GameObject obj in abilityMenu.GetComponent<AbilityMenu>().abilities) {
+			obj.GetComponent<Image> ().color = new Color32(255, 255, 255, 100);
+			obj.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(0, 0, 0, 255);
+		}
+
+		SetTargetingMode (selectedAbility.target);
+
+		InitiateTargetSelection ();
+	}
+
+	// Return to Select Ability Menu
+	void ReturnToSelectAbilityMenu() {
+		abilityMenu.SetActive (true);
+		selectingAbility = true;
+		selectingTarget = false;
+		// Clear pointers Targets
+		enemies [currentEnemyNr].GetComponent<Enemy> ().selectedPointer.SetActive (false);
+		friendlies [currentEnemyNr].transform.FindChild("Selected").gameObject.SetActive(false);
+		selectedAbilityBar.SetActive (false);
+	}
+
+	// Leave menu and start Rhythm Game
+	void ConfirmedTarget() {
+		// Clear pointers Targets
+		foreach (GameObject enemy in enemies) {
+			enemy.GetComponent<Enemy> ().selectedPointer.SetActive (false);
+		}
+		foreach (GameObject friend in friendlies) {
+			friend.transform.FindChild("Selected").gameObject.SetActive(false);
+		}
+		// Setup targets
+		targets = new GameObject[] { target };
+		// Start Rhythm Game
+		StartCoroutine(InitiateBeatGame ());
+	}
+		
+	// This loop is the heart of combat, and loops while combat goes on
 	IEnumerator Combat () {
 
 		// Starts combat
@@ -215,7 +199,6 @@ public class CombatController : MonoBehaviour {
 		friendlyCounter += 1;
 
 		while (combat) {
-
 			turnInProgress = true;
 			print(activeCharacter.name);
 			// Player Turn
@@ -233,36 +216,76 @@ public class CombatController : MonoBehaviour {
 			while (turnInProgress) {
 				yield return null;
 			}
+			SetNewTurnOrder ();
+		}
+	}
 
-			// Sets the current active character to the next in line
-			// Order is as follows: PC > NPC > PC > NPC > etc.
-			if (activeCharacter.tag == "PC") {
-				activeCharacter = enemies [enemyCounter];
-				if (enemyCounter < enemyCounterMax-1) {
-					enemyCounter += 1;
-				} else {
-					enemyCounter = 0;
-				}
+	// Sets the current active character to the next in line
+	// Order is as follows: PC > NPC > PC > NPC > etc.
+	void SetNewTurnOrder () {
+		if (activeCharacter.tag == "PC") {
+			activeCharacter = enemies [enemyCounter];
+			if (enemyCounter < enemyCounterMax-1) {
+				enemyCounter += 1;
 			} else {
-				activeCharacter = friendlies [friendlyCounter];
-				if (friendlyCounter < friendlyCounterMax-1) {
-					friendlyCounter += 1;
-				} else {
-					friendlyCounter = 0;
-				}
+				enemyCounter = 0;
+			}
+		} else {
+			activeCharacter = friendlies [friendlyCounter];
+			if (friendlyCounter < friendlyCounterMax-1) {
+				friendlyCounter += 1;
+			} else {
+				friendlyCounter = 0;
 			}
 		}
 	}
 
 
-
+	// Starts the Rhythm Game. 
 	IEnumerator InitiateBeatGame () {
-
-
 		//disable target selection and UI elements
 		target.transform.FindChild("Selected").gameObject.SetActive(false);
 		selectingTarget = false;
 
+		MoveCharactersToCombatPosition ();
+
+		// Reset Rhythm game progress
+		rhythmGameController.beatHits = 0;
+		rhythmGameController.beatsPassed = 0;
+		rhythmGameController.turnEnded = false;
+
+		// Set new ability's progress/visual effects
+		selectedAbility.rhythmSetup();
+
+		// Fadeout backdrop
+		StartCoroutine (rhythmGameController.FadeRhythmGame (true));
+
+		// Show beat game interface
+		beatInterface.SetActive (true);
+		beatProgressVisual.gameObject.SetActive(false);
+
+		// Asks for player key input and set correct text
+		awaitingKeyPress = true;
+		beatKeyPressText.GetComponent<BeatKeyPressText> ().ChangeState (activeCharacter.tag);
+		beatKeyPressText.SetActive (true);
+
+		while (awaitingKeyPress) {
+			yield return null;
+		}
+		beatKeyPressText.SetActive (false);
+
+		// Start character animation
+		activeCharacter.transform.FindChild("Sprite").gameObject.GetComponent<Animator>().SetTrigger(selectedAbility.name);
+
+		beatProgressVisual.gameObject.SetActive (true);
+
+		// Allows spawning of Beat Indicators
+		beatSpawner.spawned = 0;
+		rhythmGameActive = true;
+		beatSpawner.isSpawning = true;
+	}
+
+	void MoveCharactersToCombatPosition () {
 		// Store old position of target
 		oldTargetPos = target.transform.position;
 
@@ -281,51 +304,9 @@ public class CombatController : MonoBehaviour {
 		} else {
 			StartCoroutine (MoveCharacter (target, PCPos));
 		}
-
-		// Reset progress
-		rhythmGameController.beatHits = 0;
-		rhythmGameController.beatsPassed = 0;
-		rhythmGameController.turnEnded = false;
-
-		// Set new ability's progress/visual effects
-		selectedAbility.rhythmSetup();
-
-		// Fadeout backdrop
-		StartCoroutine (rhythmGameController.FadeRhythmGame (true));
-
-			
-		// Show beat game interface
-		beatInterface.SetActive (true);
-		beatProgressVisual.gameObject.SetActive(false);
-
-		// Asks for player key input and set correct text
-		awaitingKeyPress = true;
-		beatKeyPressText.GetComponent<BeatKeyPressText> ().ChangeState (activeCharacter.tag);
-		beatKeyPressText.SetActive (true);
-
-		while (awaitingKeyPress) {
-			yield return null;
-		}
-		beatKeyPressText.SetActive (false);
-
-		// Start character animation
-		activeCharacter.transform.FindChild("Sprite").gameObject.GetComponent<Animator>().SetTrigger(selectedAbility.name);
-
-
-			beatProgressVisual.gameObject.SetActive (true);
-	
-
-		// Allows spawning of Beat Indicators
-		beatSpawner.spawned = 0;
-		rhythmGameActive = true;
-		beatSpawner.isSpawning = true;
-
-
-
 	}
 
 	IEnumerator StartEnemyTurn() {
-		
 		yield return new WaitForSeconds (0.5f);
 
 		// Move enemy to correct position and store previous position
@@ -338,7 +319,6 @@ public class CombatController : MonoBehaviour {
 		// Apply Status Effects
 		activeCharacter.GetComponent<Enemy> ().ResolveStatus();
 
-
 		// Select ability (no AI)
 		string [] abilityArray = activeCharacter.GetComponent<Enemy>().GetAbilities();
 		selectedAbility = abilityController.abilityDictionary [abilityArray [Random.Range (0, abilityArray.Length)]];
@@ -347,20 +327,16 @@ public class CombatController : MonoBehaviour {
 		selectedAbilityBar.transform.FindChild ("AbilityName").GetComponent<Text> ().text = selectedAbility.name;
 		selectedAbilityBar.transform.FindChild ("AbilityType").GetComponent<Image> ().color = ChangeAbilityTypeColor(selectedAbility.type);
 
-
 		// Select target(s)
 		SetupCharacterList();
 		SelectTargetsNPC(selectedAbility.target);
 
 		yield return new WaitForSeconds (1.5f);
 
-
 		StartCoroutine(InitiateBeatGame());
-
 	}
 
 	public IEnumerator EndEnemyTurn () {
-
 		yield return new WaitForSeconds (1.5f);
 
 		// Stop enemy attack animations, if applicable
@@ -368,9 +344,7 @@ public class CombatController : MonoBehaviour {
 
 		selectedAbilityBar.SetActive(false);
 
-
 		// Move character back to starting position
-		//StartCoroutine (MoveCamera (cameraPos));
 		StartCoroutine (MoveCharacter (target, oldTargetPos));
 		StartCoroutine (MoveCharacter (activeCharacter, activeCharacterPos));
 
@@ -407,8 +381,7 @@ public class CombatController : MonoBehaviour {
 		} else {
 			targetnr = 1;
 		}
-		
-		
+
 		// Renew charactersLeft
 		List<GameObject> charactersLeft = new List<GameObject>();
 		foreach (GameObject character in characterList) {
@@ -425,14 +398,10 @@ public class CombatController : MonoBehaviour {
 			charactersLeft.Remove(target);
 			Debug.Log(target);
 		}
-		
 		targets = new GameObject[] { target };
-
 	}
 
-
 	IEnumerator StartPlayerTurn() {
-
 		yield return new WaitForSeconds (0.5f);
 
 		// Move character to correct position and store previous position
@@ -445,10 +414,7 @@ public class CombatController : MonoBehaviour {
 
 		// Sets up correct abilities for active character
 		SetupAbilityMenu(activeCharacter);
-
-
 	}
-
 
 	public IEnumerator EndPlayerTurn () {
 
@@ -457,9 +423,7 @@ public class CombatController : MonoBehaviour {
 		// Stop character animations
 		activeCharacter.transform.FindChild("Sprite").gameObject.GetComponent<Animator>().SetTrigger(selectedAbility.name);
 
-
 		// Move character back to starting position
-		//StartCoroutine (MoveCamera (cameraPos));
 		StartCoroutine (MoveCharacter (target, oldTargetPos));
 		StartCoroutine (MoveCharacter (activeCharacter, activeCharacterPos));
 
@@ -469,7 +433,6 @@ public class CombatController : MonoBehaviour {
 
 		// FadeIn Backdrop
 		StartCoroutine (rhythmGameController.FadeRhythmGame (false));
-
 
 		// Disable irrelevant UI
 		abilityDescription.SetActive (false);
@@ -486,13 +449,9 @@ public class CombatController : MonoBehaviour {
 		yield return new WaitForSeconds (1.5f);
 
 		turnInProgress = false;
-
-
 	}
 
-
 	void EndCombat (bool win) {
-
 		combat = false;
 		selectedAbilityBar.SetActive (false);
 
@@ -502,8 +461,6 @@ public class CombatController : MonoBehaviour {
 		beatSpawner.isSpawning = false;
 
 		victoryScreen.SetActive (true);
-
-
 		if (win) {
 			StartCoroutine(WinCombat());
 		} else {
@@ -511,8 +468,8 @@ public class CombatController : MonoBehaviour {
 		}
 	}
 
+	// Win condition for combat
 	IEnumerator WinCombat () {
-
 		// show victory screen
 		victoryScreen.transform.FindChild("Text").GetComponent<Text>().text = "Victory!";
 
@@ -526,17 +483,14 @@ public class CombatController : MonoBehaviour {
 
 		yield return new WaitForSeconds (0.5f);
 
-
 		while (!Input.anyKeyDown) {
 			yield return null;
 		}
-
 		gameController.LoadOverworld ();
-
 	}
 
+	// Lose condition for combat
 	IEnumerator LoseCombat () {
-
 		victoryScreen.transform.FindChild("Text").GetComponent<Text>().text = "Lost..";
 
 		yield return new WaitForSeconds (0.5f);
@@ -557,13 +511,10 @@ public class CombatController : MonoBehaviour {
 			enemies = GameObject.FindGameObjectsWithTag ("NPC");
 			if (enemies.Length == 0) {
 				EndCombat (true);
-
 			} else {
 				enemyCounter = 0;
 				enemyCounterMax = enemies.Length;
 			}
-
-
 		} else {
 			friendlies = GameObject.FindGameObjectsWithTag ("PC");
 			if (friendlies.Length == 0) {
@@ -576,17 +527,13 @@ public class CombatController : MonoBehaviour {
 		}
 	}
 
-
 	void SetupAbilityMenu (GameObject character){
-
-		// clear ability menu
+		// Clear ability menu
 		foreach (GameObject abi in abilityMenu.GetComponent<AbilityMenu>().abilityEntries) {
 			abi.SetActive (false);
 		}
-
 		selectingAbility = true;
 		string[] abilityArray = activeCharacter.GetComponent<Friendly> ().abilityArray;
-		//string[] abilityArray = partyController.GetAbilities (character.name);
 		for (int i = 0; i < abilityArray.Length; i++) {
 			GameObject menuItem = abilityMenu.transform.FindChild (i + 1 + "").gameObject;
 			menuItem.transform.FindChild ("AbilityName").GetComponent<Text> ().text = abilityArray[i];
@@ -599,10 +546,10 @@ public class CombatController : MonoBehaviour {
 	}
 
 	public void ChangeAbilityDescription () {
-
 		abilityDescription.transform.FindChild ("AbilityText").GetComponent<Text> ().text = abilityController.abilityDictionary[abilityMenu.GetComponent<AbilityMenu> ().currentAbility.transform.FindChild ("AbilityName").GetComponent<Text> ().text].text;
 	}
 
+	// Changes the color of the orb next to Abilities in the Ability Selection Menu
 	Color32 ChangeAbilityTypeColor (string type) {
 		switch (type) {
 		case "Rotten":
@@ -633,74 +580,59 @@ public class CombatController : MonoBehaviour {
 	}
 
 	// ## Player Target Selection ##
-
 	void InitiateTargetSelection () {
 		// Reset targetting state
 		selectingAbility = false;
 		selectingTarget = true;
 
-
 		// Clear pointers Targets
-		foreach (GameObject enemy in enemies) {
 			enemies [currentEnemyNr].GetComponent<Enemy> ().selectedPointer.SetActive (false);
-		}
-
 		// Clear pointers Targets
-		foreach (GameObject friendly in friendlies) {
 			friendlies [currentEnemyNr].transform.FindChild("Selected").gameObject.SetActive(false);
-		}
 
 		if (targetingMode == "Enemy") {
 			enemies [currentEnemyNr].GetComponent<Enemy> ().selectedPointer.SetActive (true);
 			target = enemies [currentEnemyNr];
 		}
-
 		else {
 			friendlies [currentEnemyNr].transform.FindChild("Selected").gameObject.SetActive(false);;
 			target = friendlies [currentEnemyNr];
 		}
 			
 		target.transform.FindChild("Selected").gameObject.SetActive(true);
-
 	}
 
+	// Cycles to next target
+	// !!! Bit convoluted, reduce conditional nesting
 	void NextTarget () {
 		target.transform.FindChild("Selected").gameObject.SetActive(false);
-
 		if (targetingMode == "Enemy") {
-			
 			if (currentEnemyNr < enemies.Length - 1) {
 				currentEnemyNr += 1;
 			} else {
 				currentEnemyNr = 0;
 			}
-
 			target = enemies [currentEnemyNr];
-
 		} else if (targetingMode == "Self") {
 			target = friendlies [0];
 
 			// TargetingMode if Friendlies
 		} else {
-			
 			if (currentEnemyNr > 0) {
 				currentEnemyNr -= 1;
 			} else {
 				currentEnemyNr = friendlies.Length - 1;
 			}
-
 			target = friendlies [currentEnemyNr];
-
 		}
-			
 		target.transform.FindChild("Selected").gameObject.SetActive(true);
 		audioSource.Play ();
-
 	}
 
+	// Cycles to previous target
+	// !!! Bit convoluted, reduce conditional nesting
 	void PreviousTarget () {
 		target.transform.FindChild("Selected").gameObject.SetActive(false);
-
 		if (targetingMode == "Enemy") {
 			if (currentEnemyNr > 0) {
 				currentEnemyNr -= 1;
@@ -708,25 +640,19 @@ public class CombatController : MonoBehaviour {
 				currentEnemyNr = enemies.Length - 1;
 			}
 			target = enemies [currentEnemyNr];
-
 		} else if (targetingMode == "Self") {
 			target = friendlies [0];
 
 		} else {
-			
 			if (currentEnemyNr < friendlies.Length - 1) {
 				currentEnemyNr += 1;
 			} else {
 				currentEnemyNr = 0;
 			}
-
 			target = friendlies [currentEnemyNr];
 		}
-
 		target.transform.FindChild("Selected").gameObject.SetActive(true);
 		audioSource.Play ();
-
 	}
 
-
-}
+} // End

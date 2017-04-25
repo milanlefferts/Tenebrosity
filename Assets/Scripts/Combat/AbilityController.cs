@@ -4,50 +4,23 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 
-public class Ability {
-
-	public string name;
-	public string text;
-	public string target;
-	public string type;
-	public Action effect;
-	public Action rhythmSetup;
-
-	public Ability (string aName, string aText, string aTarget, string aType, Action aEffect, Action rhythm) {
-		name = aName;
-		text = aText;
-		target = aTarget;
-		type = aType;
-		effect = aEffect;
-		rhythmSetup = rhythm;
-
-	}
-
-}
-
-
+// Regulates the effects of using Abilities in combat.
+// Abilities with 'rS' are used to determine their 'charging' animation frames during Combat. 
 public class AbilityController : MonoBehaviour {
-
-	PartyController partyController;
-	CombatController combatController;
-	RhythmGameController rhythmGameController;
-
-	// Rhythm Progress Visual sprites
-	public Sprite[] rPV_drainBlood;
+	public CombatController combatController;
+	public RhythmGameController rhythmGameController;
 
 	public Dictionary<string, Ability> abilityDictionary = new Dictionary<string, Ability>();
 
+	public Sprite[] statusIcons;
+	// Blooddrop icon spawned on ability use -> move somewhere else?
 	public GameObject bloodDrop;
 
-	public Sprite[] statusIcons;
-
 	void Awake () {
-
-		Action slam = Slam;
-		Action slam_rS = Slam_rS;
-		Action peck = Peck;
-		Action peck_rS = Peck_rS;
-
+		
+	// Assigns methods to all actions
+	// ! Must be a better way to mass assign these
+		// Elize actions
 		Action drainBlood = DrainBlood;
 		Action drainBlood_rS = DrainBlood_rS;
 		Action unholyMending = UnholyMending;
@@ -57,6 +30,7 @@ public class AbilityController : MonoBehaviour {
 		Action quickeningPulse = QuickeningPulse;
 		Action quickeningPulse_rS = QuickeningPulse_rS;
 
+		// Angelo actions
 		Action graveInsult = GraveInsult;
 		Action ribCage = RibCage;
 		Action shoulderBlade = ShoulderBlade;
@@ -66,6 +40,7 @@ public class AbilityController : MonoBehaviour {
 		Action shoulderBlade_rS = ShoulderBlade_rS;
 		Action skullCracker_rS = Skullcracker_rS;
 
+		// Frederic actions
 		Action tear = Tear;
 		Action pounce = Pounce;
 		Action lickWounds = LickWounds;
@@ -75,6 +50,13 @@ public class AbilityController : MonoBehaviour {
 		Action lickWounds_rS = LickWounds_rS;
 		Action howl_rS = Howl_rS;
 
+		// Enemy actions
+		Action slam = Slam;
+		Action slam_rS = Slam_rS;
+		Action peck = Peck;
+		Action peck_rS = Peck_rS;
+	
+	// Adds party/enemy abilities to the ability dictionary
 		// HeartSeeker Abilities
 		abilityDictionary.Add ("Peck", new Ability(
 			"Peck", 
@@ -131,7 +113,6 @@ public class AbilityController : MonoBehaviour {
 			quickeningPulse,
 			quickeningPulse_rS
 		));
-			
 
 	// Angelo Abilities
 		abilityDictionary.Add ("ShoulderBlade", new Ability(
@@ -170,7 +151,6 @@ public class AbilityController : MonoBehaviour {
 			skullCracker_rS
 		));
 
-
 	// Frederic Abilities
 		abilityDictionary.Add ("Tear", new Ability(
 			"Tear", 
@@ -207,88 +187,74 @@ public class AbilityController : MonoBehaviour {
 			pounce,
 			pounce_rS
 		));
-			
 	}
 		
 	void Start () {
-		partyController = GameObject.FindGameObjectWithTag ("PartyController").GetComponent<PartyController> ();
 		combatController = GameObject.FindGameObjectWithTag ("CombatController").GetComponent<CombatController> ();
 		rhythmGameController = GameObject.FindGameObjectWithTag ("RhythmGameController").GetComponent<RhythmGameController>();
 	}
 
-	// Ability General Functions
+	// Inflicts damage on the target(s)
 	public void InflictDamage (GameObject[] targets, int damage, int pierce, string type) {
 
 		// Calculate damage reduction based on beats hit
 		int defense = (int)rhythmGameController.beatHits;
 
+		// Shows damage blocked by NPCs
 		if (combatController.activeCharacter.tag == "NPC") {
 			if (defense > 0) {
 				combatController.target.GetComponent<Friendly>().SpawnText("Blocked " + defense);
 			}
-
 			damage -= defense;
 			if (damage < 0) {
 				damage = 0;
 			}
 		}
-
 		foreach (GameObject target in targets) {
 			// Player Character
 			if (target.tag == "PC") {
 				target.GetComponent<Friendly> ().Damage (damage, pierce, type);
 			}
-			 
 			// Enemy Character
-			else if (target.tag == "NPC") {
+			else {
 				target.GetComponent<Enemy> ().Damage (damage, pierce, type);
 			} 
 		}
-
-		// End Turn
-		if (combatController.activeCharacter.tag == "PC") {
-			StartCoroutine(combatController.EndPlayerTurn());
-
-		} else {
-			StartCoroutine(combatController.EndEnemyTurn());
-		}
+		EndTurn ();
 	}
 
+	// Heals the target(s)
 	public void Heal (GameObject[] targets, int healing) {
 		foreach (GameObject target in targets) {
 			// Player Character
 			if (target.tag == "PC") {
 				target.GetComponent<Friendly> ().Heal (healing);
 			}
-
 			// Enemy Character
-			else if (target.tag == "NPC") {
+			else {
 				target.GetComponent<Enemy> ().Heal (healing);
 			}
 		}
-
-		// End Turn
-		if (combatController.activeCharacter.tag == "PC") {
-			StartCoroutine(combatController.EndPlayerTurn());
-		} else {
-			StartCoroutine(combatController.EndEnemyTurn());
-		}
+		EndTurn ();
 	}
 
+	// Inflicts Status on the target(s)
 	public void InflictStatus (GameObject[] targets, string status, int duration, string type) {
 		foreach (GameObject target in targets) {
 			// Player Character
 			if (target.tag == "PC") {
 				target.GetComponent<Friendly> ().InflictStatus (status, duration, type);
 			}
-
 			// Enemy Character
-			else if (target.tag == "NPC") {
+			else {
 				target.GetComponent<Enemy> ().InflictStatus (status, duration, type);
-
 			}
 		}
-		// End Turn
+		EndTurn ();
+	}
+
+	// End Turn after using an Ability
+	void EndTurn() {
 		if (combatController.activeCharacter.tag == "PC") {
 			StartCoroutine(combatController.EndPlayerTurn());
 		} else {
@@ -296,77 +262,29 @@ public class AbilityController : MonoBehaviour {
 		}
 	}
 
+	// This method is used to set the Ability attributes for the current combat round.
+	public void SetBeatInformation (float beatHitsRequired, int beatSpawnedTotal, float beatSpawnSpeed, float beatTravelSpeed, string resourceName, float beatVisualAnimationStates) {
+		// Set Beat information
+		rhythmGameController.beatHitsRequired = beatHitsRequired;
+		rhythmGameController.beatSpawnedTotal = beatSpawnedTotal;
+		rhythmGameController.beatSpawnSpeed = beatSpawnSpeed;
+		rhythmGameController.beatTravelSpeed = beatTravelSpeed;
 
-	// ENEMY Abilities
+		// Load correct Rhythm Game Animator and set Animation frames
+		rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load(resourceName) as RuntimeAnimatorController;
+		rhythmGameController.beatVisualAnimationStates = beatVisualAnimationStates;
+	}
+
+	// Elize Abilities
 	// -------------------------------------------------------------------------------------------------------------
-
-
-	// LakeDweller
-
-	public void Slam () {
-		InflictDamage (combatController.targets, 15, 0, "Organic");
-
-		//Heal (combatController.targets, 5);
-	}
-
-	public void Slam_rS () {
-		// Set Beat information
-		rhythmGameController.beatHitsRequired = 6f;
-		rhythmGameController.beatSpawnedTotal = 6;
-		rhythmGameController.beatSpawnSpeed = 1f;
-		rhythmGameController.beatTravelSpeed = 160f;
-
-		// Load correct Rhythm Game Animator
-		rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = null;
-
-		//rhythmGameController.beatHitsRequired / 4;
-		rhythmGameController.beatVisualAnimationStates = 6f;
-	}
-
-	// Heartseeker
-	public void Peck () {
-		InflictDamage (combatController.targets, 10, 0, "Undying");
-
-		//Heal (combatController.targets, 5);
-	}
-
-	public void Peck_rS () {
-		// Set Beat information
-		rhythmGameController.beatHitsRequired = 6f;
-		rhythmGameController.beatSpawnedTotal = 10;
-		rhythmGameController.beatSpawnSpeed = 1f;
-		rhythmGameController.beatTravelSpeed = 160f;
-
-		// Load correct Rhythm Game Animator
-		//rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load("Animators/Defend") as RuntimeAnimatorController;
-
-		rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = null;
-		rhythmGameController.beatVisualAnimationStates = 6f;
-	}
-
-
-// Elize Abilities
-// -------------------------------------------------------------------------------------------------------------
 
 	public void DrainBlood () {
 		InflictDamage (combatController.targets, 10, 0, "Tainted");
-
 		//Heal (combatController.targets, 5);
 	}
 
 	public void DrainBlood_rS () {
-		// Set Beat information
-		rhythmGameController.beatHitsRequired = 5f;
-		rhythmGameController.beatSpawnedTotal = 10;
-		rhythmGameController.beatSpawnSpeed = 1f;
-		rhythmGameController.beatTravelSpeed = 160f;
-
-		// Load correct Rhythm Game Animator
-		rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load("Animators/DrainBlood") as RuntimeAnimatorController;
-		rhythmGameController.beatVisualAnimationStates = 5f;
-
-		//combatController.activeCharacter.transform.FindChild("Sprite").gameObject.GetComponent<Animator>().SetTrigger(combatController.selectedAbility.name);
-
+		SetBeatInformation(5f, 10, 1f, 160f, "Animators/DrainBlood", 5f);
 	}
 
 	public void UnholyMending () {
@@ -374,16 +292,7 @@ public class AbilityController : MonoBehaviour {
 	}
 
 	public void UnholyMending_rS () {
-		// Set Beat information
-		rhythmGameController.beatHitsRequired = 8f;
-		rhythmGameController.beatSpawnedTotal = 12;
-		rhythmGameController.beatSpawnSpeed = 1f;
-		rhythmGameController.beatTravelSpeed = 160;
-
-		// Load correct Rhythm Game Animator
-		rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load("Animators/UnholyMending") as RuntimeAnimatorController;
-		rhythmGameController.beatVisualAnimationStates = 6f;
-
+		SetBeatInformation(8f, 12, 1f, 160f, "Animators/UnholyMending", 6f);
 	}
 
 	public void Debilitate () {
@@ -417,45 +326,17 @@ public class AbilityController : MonoBehaviour {
 	}
 
 	public void Skullcracker_rS () {
-		// Set Beat information
-		rhythmGameController.beatHitsRequired = 5f;
-		rhythmGameController.beatSpawnedTotal = 10;
-		rhythmGameController.beatSpawnSpeed = 1f;
-		rhythmGameController.beatTravelSpeed = 180f;
-
-		// Load correct Rhythm Game Animator
-		rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load("Animators/Skullcracker") as RuntimeAnimatorController;
-		rhythmGameController.beatVisualAnimationStates = 1f;
-
-		//combatController.activeCharacter.transform.FindChild("Sprite").gameObject.GetComponent<Animator>().SetTrigger(combatController.selectedAbility.name);
-
-
+		SetBeatInformation(5f, 10, 1f, 180f, "Animators/Skullcracker", 1f);
 	}
-
 		
 	public void RibCage () {
 		InflictStatus (combatController.targets, "DefPlus", 3, "Undying");
-
-		//Heal (combatController.targets, 5);
 	}
 
 	public void RibCage_rS () {
-		// Set Beat information
-		rhythmGameController.beatHitsRequired = 4f;
-		rhythmGameController.beatSpawnedTotal = 5;
-		rhythmGameController.beatSpawnSpeed = 1f;
-		rhythmGameController.beatTravelSpeed = 160f;
-
-		// Load correct Rhythm Game Animator
-		rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load("Animators/RibCage") as RuntimeAnimatorController;
-		rhythmGameController.beatVisualAnimationStates = 4f;
-
-	
+		SetBeatInformation(4f, 5, 1f, 160f, "Animators/RibCage", 4f);
 	}
-
-
-
-
+		
 	public void ShoulderBlade_rS () {
 		InflictDamage (combatController.targets, 10, 5, "Undying");
 	}
@@ -464,81 +345,61 @@ public class AbilityController : MonoBehaviour {
 		InflictStatus (combatController.targets, "Taunt", 3, "Undying");
 	}
 
-
-
-
 	// Frederic Abilities
 	// -------------------------------------------------------------------------------------------------------------
 
 	public void Tear () {
 		InflictStatus (combatController.targets, "DoT", 3, "Organic");
 		InflictDamage (combatController.targets, 4, 0, "Tainted");
-
 	}
 
 	public void Tear_rS () {
-		// Set Beat information
-		rhythmGameController.beatHitsRequired = 4f;
-		rhythmGameController.beatSpawnedTotal = 8;
-		rhythmGameController.beatSpawnSpeed = 0.5f;
-		rhythmGameController.beatTravelSpeed = 120f;
-
-		// Load correct Rhythm Game Animator
-		rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load("Animators/Tear") as RuntimeAnimatorController;
-		rhythmGameController.beatVisualAnimationStates = 2f;
-
-	
+		SetBeatInformation(4f, 8, 0.5f, 120f, "Animators/Tear", 2f);
 	}
-
-
 
 	public void LickWounds () {
 		Heal (combatController.targets, 20);
 		InflictStatus (combatController.targets, "Debuff: Defense", 1, "Organic");
 	}
 
-	public void Pounce () {
-		// Self: Charge
-		// Next turn: Enemy heavy damage
-		//InflictStatus (combatController.targets, "Charge", 1);
+	public void LickWounds_rS () {
 	}
 
+	public void Pounce () {
+		InflictStatus (combatController.targets, "Charge", 1, "Organic");
+	}
+
+	public void Pounce_rS () {
+	}
 
 	public void Howl () {
 		InflictStatus (combatController.targets, "DefMin", 3, "Organic");
 	}
 
 	public void Howl_rS () {
-		// Set Beat information
-		rhythmGameController.beatHitsRequired = 6f;
-		rhythmGameController.beatSpawnedTotal = 12;
-		rhythmGameController.beatSpawnSpeed = 1f;
-		rhythmGameController.beatTravelSpeed = 160f;
-
-		// Load correct Rhythm Game Animator
-		rhythmGameController.beatProgressVisual.GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load("Animators/Howl") as RuntimeAnimatorController;
-		rhythmGameController.beatVisualAnimationStates = 3f;
-
+		SetBeatInformation(6f, 12, 1f, 160f, "Animators/Howl", 3f);
 	}
 
-	public void LickWounds_rS () {
-		Heal (combatController.targets, 20);
-		InflictStatus (combatController.targets, "Debuff: Defense", 1, "Organic");
+	// Enemy Abilities
+	// -------------------------------------------------------------------------------------------------------------
+
+	// LakeDweller
+	public void Slam () {
+		InflictDamage (combatController.targets, 15, 0, "Organic");
 	}
 
-	public void Pounce_rS () {
-		// Self: Charge
-		// Next turn: Enemy heavy damage
-		//InflictStatus (combatController.targets, "Charge", 1);
+	public void Slam_rS () {
+		SetBeatInformation(6f, 6, 1f, 160f, "Animators/Slam", 6f);
 	}
 
+	// Heartseeker
+	public void Peck () {
+		InflictDamage (combatController.targets, 10, 0, "Undying");
+	}
 
-
-
-
-
-
-
-
-}
+	public void Peck_rS () {
+		SetBeatInformation(6f, 10, 1f, 160f, "Animators/Howl", 6f);
+	}
+		
+} // End
 

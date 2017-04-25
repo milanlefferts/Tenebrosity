@@ -39,69 +39,68 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>C:/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>C:/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\BeatGame\AudioProcessor.cs" />
-     <Compile Include="Assets\Scripts\BeatGame\BeatGoal.cs" />
-     <Compile Include="Assets\Scripts\BeatGame\BeatIndicator.cs" />
-     <Compile Include="Assets\Scripts\BeatGame\BeatIndicatorCollider.cs" />
-     <Compile Include="Assets\Scripts\BeatGame\BeatKeyPressText.cs" />
-     <Compile Include="Assets\Scripts\BeatGame\BeatProgressVisual.cs" />
-     <Compile Include="Assets\Scripts\BeatGame\BeatSpawner.cs" />
-     <Compile Include="Assets\Scripts\BeatGame\BeatText.cs" />
-     <Compile Include="Assets\Scripts\BeatGame\RhythmGameController.cs" />
+     <Compile Include="Assets\Scripts\Combat\Ability.cs" />
      <Compile Include="Assets\Scripts\Combat\AbilityController.cs" />
      <Compile Include="Assets\Scripts\Combat\AbilityMenu.cs" />
+     <Compile Include="Assets\Scripts\Combat\Character.cs" />
      <Compile Include="Assets\Scripts\Combat\CombatController.cs" />
      <Compile Include="Assets\Scripts\Combat\DamageBlooddrop.cs" />
      <Compile Include="Assets\Scripts\Combat\Enemy.cs" />
-     <Compile Include="Assets\Scripts\Combat\EnemySelection.cs" />
      <Compile Include="Assets\Scripts\Combat\Friendly.cs" />
      <Compile Include="Assets\Scripts\Combat\StatusText.cs" />
-     <Compile Include="Assets\Scripts\DialogueCollider.cs" />
-     <Compile Include="Assets\Scripts\EnemyEncounter.cs" />
-     <Compile Include="Assets\Scripts\GameController.cs" />
-     <Compile Include="Assets\Scripts\Interactable_Dialogue.cs" />
-     <Compile Include="Assets\Scripts\Interactable_Teleport.cs" />
-     <Compile Include="Assets\Scripts\Inventory.cs" />
-     <Compile Include="Assets\Scripts\OverworldController.cs" />
-     <Compile Include="Assets\Scripts\PartyController.cs" />
-     <Compile Include="Assets\Scripts\PickupObject.cs" />
-     <Compile Include="Assets\Scripts\PlayerController.cs" />
-     <Compile Include="Assets\Scripts\RigidbodyFPS.cs" />
-     <Compile Include="Assets\Scripts\RotateElement.cs" />
-     <Compile Include="Assets\Scripts\ShowShadows.cs" />
-     <Compile Include="Assets\Scripts\TeleportCollider.cs" />
+     <Compile Include="Assets\Scripts\Overworld\DialogueCollider.cs" />
+     <Compile Include="Assets\Scripts\Overworld\EnemyEncounter.cs" />
+     <Compile Include="Assets\Scripts\Overworld\GameController.cs" />
+     <Compile Include="Assets\Scripts\Overworld\Interactable_Dialogue.cs" />
+     <Compile Include="Assets\Scripts\Overworld\Interactable_Teleport.cs" />
+     <Compile Include="Assets\Scripts\Overworld\OverworldController.cs" />
+     <Compile Include="Assets\Scripts\Overworld\PartyController.cs" />
+     <Compile Include="Assets\Scripts\Overworld\PickupObject.cs" />
+     <Compile Include="Assets\Scripts\Overworld\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\Overworld\RotateElement.cs" />
+     <Compile Include="Assets\Scripts\Overworld\ShowShadows.cs" />
+     <Compile Include="Assets\Scripts\Overworld\TeleportCollider.cs" />
+     <Compile Include="Assets\Scripts\RhythmGame\AudioProcessor.cs" />
+     <Compile Include="Assets\Scripts\RhythmGame\BeatGoal.cs" />
+     <Compile Include="Assets\Scripts\RhythmGame\BeatIndicator.cs" />
+     <Compile Include="Assets\Scripts\RhythmGame\BeatIndicatorCollider.cs" />
+     <Compile Include="Assets\Scripts\RhythmGame\BeatKeyPressText.cs" />
+     <Compile Include="Assets\Scripts\RhythmGame\BeatProgressVisual.cs" />
+     <Compile Include="Assets\Scripts\RhythmGame\BeatSpawner.cs" />
+     <Compile Include="Assets\Scripts\RhythmGame\BeatText.cs" />
+     <Compile Include="Assets\Scripts\RhythmGame\RhythmGameController.cs" />
      <None Include="Assets\Shaders\$CutoutBumpwithShadows.shader" />
      <None Include="Assets\Shaders\$Sprites-Bumped Diffuse.shader" />
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
- <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.PlaymodeTestsRunner">
- <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/PlaymodeTestsRunner/UnityEngine.PlaymodeTestsRunner.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/PlaymodeTestsRunner/UnityEngine.PlaymodeTestsRunner.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Analytics">
- <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.HoloLens">
- <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.VR">
- <HintPath>C:/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
- <HintPath>C:/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Common">
- <HintPath>C:/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
