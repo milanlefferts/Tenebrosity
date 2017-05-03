@@ -74,42 +74,11 @@ public class Enemy : Character {
 		combatController.UpdateTurnOrder ("NPC");
 	}
 
-	public override void Damage (int dmg, int prc, string type) {
-		CheckDeathThroes (type);
-
-		int dam = 0;
-		if (combatController.activeCharacter.tag == "PC") {
-			dam = dmg 
-				- defenseModifier 
-				+ combatController.activeCharacter.GetComponent<Friendly>().damageModifier
-				* deathThroes;
-		} 
-		// Self damage or DoT
-		else {
-			dam = dmg;
-		}
-		if (dam < 0) {
-			dam = 0;
-		}
-		health -= dam;
-		GameObject damageIcon = Instantiate (abilityController.bloodDrop, this.transform.position, Quaternion.identity);
-		damageIcon.GetComponentInChildren<TextMesh> ().text = dam + "";
-
-		audioSource.clip = hit;
-		audioSource.Play ();
-	}
-
 	public override void InflictStatus (string stat, int dur, string type) {
 		if (combatController.activeCharacter.tag == "PC") {
 			CheckDeathThroes (type);
 		}
-		status = stat;
-		duration = dur;
-		SpawnText (stat);
-		UpdateStatusIcon ();
-
-		audioSource.clip = hit;
-		audioSource.Play ();
+		base.InflictStatus (stat, dur, type);
 	}
 		
 } // End

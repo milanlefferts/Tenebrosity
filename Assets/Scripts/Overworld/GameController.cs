@@ -46,7 +46,6 @@ public class GameController : MonoBehaviour {
 			DontDestroyOnLoad(transform.gameObject);
 			Instance = this;
 		}
-
 	}
 
 	void Start () {
@@ -54,12 +53,11 @@ public class GameController : MonoBehaviour {
 		backgroundMusic = this.GetComponent<AudioSource> ();
 
 		// Set correct gamestate by checking if the player is in the scene
-		if (player == null) {
-			currentState = GameState.Combat;
-		} else {
-			currentState = GameState.Overworld;
-		}
+		currentState = player == null ? GameState.Combat : GameState.Overworld;
+	}
 
+	public static bool Press<T>(KeyCode key) where T : struct {
+		return Input.GetKeyDown (key);
 	}
 	
 	void Update () {
@@ -91,12 +89,10 @@ public class GameController : MonoBehaviour {
 	void ToggleInventory() {
 		if (inventory.activeSelf) {
 			inventory.SetActive (false);
-			PausePlayer ();
-
 		} else {
 			inventory.SetActive (true);
-			PausePlayer ();
 		}
+		PausePlayer ();
 	}
 
 	// Freeze the game
@@ -196,7 +192,6 @@ public class GameController : MonoBehaviour {
 	// !!! May change to a function on the item that awards itself
 	public void SaveRewards() {
 		reward = new string[] { name };
-
 		foreach (string rew in reward) {
 			//print(rew + " was added to inventory");
 			switch (rew) {
@@ -217,10 +212,8 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void PickupObject(string name) {
-		
 		SaveRewards ();
 	}
-		
 
 	public void SavePlayerStats () {
 

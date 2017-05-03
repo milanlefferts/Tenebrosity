@@ -3,42 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-
 public class AbilityMenu : MonoBehaviour {
-
-	GameObject ability1;
-	GameObject ability2;
-	GameObject ability3;
-	GameObject ability4;
-	GameObject ability5;
-	GameObject ability6;
+	// Abilities
+	private GameObject ability1, ability2, ability3, ability4, ability5, ability6;
 	public GameObject[] abilityEntries;
-
 	public List<GameObject> abilities = new List<GameObject>();
-
 	public GameObject currentAbility;
-
 	public int currentAbilityNr;
-	CombatController combatController;
+
+	private CombatController combatController;
 
 	void Awake() {
-		ability1 = transform.FindChild("1").gameObject;
-		ability2 = transform.FindChild("2").gameObject;
-		ability3 = transform.FindChild("3").gameObject;
-		ability4 = transform.FindChild("4").gameObject;
-		ability5 = transform.FindChild("5").gameObject;
-		ability6 = transform.FindChild("6").gameObject;
+		AssignAbilities();
 		abilityEntries = new GameObject[] {ability1, ability2, ability3, ability4, ability5, ability6};
-
 	}
 
 	void Start () {
-		//
 		combatController = GameObject.FindGameObjectWithTag ("CombatController").GetComponent<CombatController> ();
 	}
 
-	// Update is called once per frame
 	void Update () {
+		//!!! Must centralized all input
 		if (Input.GetKeyDown (KeyCode.UpArrow)) {
 			Up ();
 		}
@@ -48,16 +33,19 @@ public class AbilityMenu : MonoBehaviour {
 		}
 	}
 
-	public void DetermineAbilities () {
-
-		
+	void AssignAbilities () {
+		// !!! Can be changed to manual assignment to clear code
 		ability1 = transform.FindChild("1").gameObject;
 		ability2 = transform.FindChild("2").gameObject;
 		ability3 = transform.FindChild("3").gameObject;
 		ability4 = transform.FindChild("4").gameObject;
 		ability5 = transform.FindChild("5").gameObject;
 		ability6 = transform.FindChild("6").gameObject;
+	}
 
+	// Shows the available abilities of the current character in the menu
+	public void DetermineAbilities () {
+		AssignAbilities ();
 		abilities.Clear ();
 
 		GameObject[] menuEntries = new GameObject[] {ability1, ability2, ability3, ability4, ability5, ability6};
@@ -67,33 +55,25 @@ public class AbilityMenu : MonoBehaviour {
 				abilities.Add (obj);
 			}
 		}
-
 		currentAbilityNr = 0;
 		currentAbility = abilities [currentAbilityNr];
-		currentAbility.GetComponent<Image> ().color = new Color32(0, 0, 0, 255);
-		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(255, 255, 255, 255);
-
+		SetColorSelect ();
 	}
 
+	// Move down in the menu
 	void Down () {
-		currentAbility.GetComponent<Image> ().color = new Color32(255, 255, 255, 100);
-		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(0, 0, 0, 255);
+		SetColorDeselect ();
 		if (currentAbilityNr < abilities.Count - 1 && abilities.Count > 1) {
 			currentAbilityNr += 1;
 		} else {
 			currentAbilityNr = 0;
 		}
-		currentAbility = abilities [currentAbilityNr];
-		currentAbility.GetComponent<Image> ().color = new Color32(0, 0, 0, 255);
-		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(255, 255, 255, 255);
-		combatController.ChangeAbilityDescription ();
-		combatController.audioSource.Play ();
-
+		HighlightSelectedAbility ();
 	}
 
+	// Move up in the menu
 	void Up () {
-		currentAbility.GetComponent<Image> ().color = new Color32(255, 255, 255, 100);
-		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(0, 0, 0, 255);
+		SetColorDeselect ();
 		if (abilities.Count == 1) {
 			currentAbilityNr = 0;
 		}
@@ -102,14 +82,24 @@ public class AbilityMenu : MonoBehaviour {
 		} else {
 			currentAbilityNr = abilities.Count - 1;
 		}
-		currentAbility = abilities [currentAbilityNr];
-		currentAbility.GetComponent<Image> ().color = new Color32(0, 0, 0, 255);
-		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(255, 255, 255, 255);
-		combatController.ChangeAbilityDescription ();
-		combatController.audioSource.Play ();
-
+		HighlightSelectedAbility ();
 	}
 
+	void HighlightSelectedAbility() {
+		currentAbility = abilities [currentAbilityNr];
+		SetColorSelect ();
+		combatController.ChangeAbilityDescription ();
+		combatController.audioSource.Play ();
+	}
 
+	void SetColorDeselect() {
+		currentAbility.GetComponent<Image> ().color = new Color32(255, 255, 255, 100);
+		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(0, 0, 0, 255);
+	}
 
-}
+	void SetColorSelect() {
+		currentAbility.GetComponent<Image> ().color = new Color32(0, 0, 0, 255);
+		currentAbility.transform.FindChild("AbilityName").GetComponent<Text>().color = new Color32(255, 255, 255, 255);
+	}
+		
+} // End

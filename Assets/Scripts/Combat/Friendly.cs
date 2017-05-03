@@ -77,11 +77,8 @@ public class Friendly : Character {
 	public override void Death () {
 		print (this.name + " died horribly!");
 		isDead = true;
-		// store relevant data
-
-		// save experience / item drops
-
-		// Death animation
+		// ! Store relevant data
+		// ! Save experience / item drops
 		this.transform.FindChild("Sprite").gameObject.GetComponent<Animator>().SetTrigger("Death");
 
 		// Death sound
@@ -96,44 +93,15 @@ public class Friendly : Character {
 	}
 		
 	public override void Damage (int dmg, int prc, string type) {
-		CheckDeathThroes (type);
-
-		int dam = 0;
-		if (combatController.activeCharacter.tag == "PC") {
-			dam = dmg 
-				- defenseModifier 
-				+ combatController.activeCharacter.GetComponent<Friendly>().damageModifier
-				* deathThroes;
-		} 
-		// Self damage or DoT
-		else {
-			dam = dmg;
-		}
-		if (dam < 0) {
-			dam = 0;
-		}
-		health -= dam;
-		GameObject damageIcon = Instantiate (abilityController.bloodDrop, this.transform.position, Quaternion.identity);
-		damageIcon.GetComponentInChildren<TextMesh> ().text = dam + "";
-
-		audioSource.clip = hit;
-		audioSource.Play ();
-
+		base.Damage (dmg, prc, type);
 		UpdateUIText ();
-
 	}
 		
 	public override void InflictStatus (string stat, int dur, string type) {
 		if (combatController.activeCharacter.tag == "NPC") {
 			CheckDeathThroes (type);
 		}
-		status = stat;
-		duration = dur;
-		SpawnText (stat);
-		UpdateStatusIcon ();
-
-		audioSource.clip = hit;
-		audioSource.Play ();
+		base.InflictStatus (stat, dur, type);
 	}
 
 	public override void UpdateUIText () {

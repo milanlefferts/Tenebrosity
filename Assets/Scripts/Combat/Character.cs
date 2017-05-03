@@ -68,6 +68,28 @@ public class Character : MonoBehaviour {
 
 	// Placeholder for Damage method
 	public virtual void Damage (int dmg, int prc, string type) {
+		CheckDeathThroes (type);
+
+		int dam = 0;
+		if (combatController.activeCharacter.tag == "PC") {
+			dam = dmg 
+				- defenseModifier 
+				+ combatController.activeCharacter.GetComponent<Friendly>().damageModifier
+				* deathThroes;
+		} 
+		// Self damage or DoT
+		else {
+			dam = dmg;
+		}
+		if (dam < 0) {
+			dam = 0;
+		}
+		health -= dam;
+		GameObject damageIcon = Instantiate (abilityController.bloodDrop, this.transform.position, Quaternion.identity);
+		damageIcon.GetComponentInChildren<TextMesh> ().text = dam + "";
+
+		audioSource.clip = hit;
+		audioSource.Play ();
 	}
 
 	// Heals the character for X
@@ -83,7 +105,6 @@ public class Character : MonoBehaviour {
 
 		audioSource.clip = hit;
 		audioSource.Play ();
-
 	}
 
 	// Placeholder for Damage method
@@ -92,6 +113,14 @@ public class Character : MonoBehaviour {
 
 	// Placeholder for InflictStatus method
 	public virtual void InflictStatus (string stat, int dur, string type) {
+		status = stat;
+		duration = dur;
+		SpawnText (stat);
+
+		UpdateStatusIcon ();
+
+		audioSource.clip = hit;
+		audioSource.Play ();
 	}
 		
 	public void UpdateStatusIcon () {
