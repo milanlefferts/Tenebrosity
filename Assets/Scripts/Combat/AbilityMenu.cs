@@ -34,7 +34,7 @@ public class AbilityMenu : MonoBehaviour {
 	}
 
 	void AssignAbilities () {
-		// !!! Can be changed to manual assignment to clear code
+		// !!! Can be changed to manual assignment for clearer code
 		ability1 = transform.FindChild("1").gameObject;
 		ability2 = transform.FindChild("2").gameObject;
 		ability3 = transform.FindChild("3").gameObject;

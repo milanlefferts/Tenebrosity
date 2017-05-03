@@ -1,8 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Combat\AbilityMenu.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\RhythmGame\BeatIndicator.cs">
     <Files>
-      <File FileName="Assets\Scripts\Combat\AbilityMenu.cs" Line="62" Column="2" />
+      <File FileName="Assets\Scripts\RhythmGame\BeatIndicator.cs" Line="218" Column="24" />
+      <File FileName="Assets\Scripts\RhythmGame\RhythmGameController.cs" Line="30" Column="29" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

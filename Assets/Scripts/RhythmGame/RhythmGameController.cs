@@ -3,49 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+// Controls the Rhythm Game and it's UI, as well as the general tempo/bpm of beat indicators
 public class RhythmGameController : MonoBehaviour {
 	// Tempo
-	public UnityEvent BeatEvent;
-	public UnityEvent BeatEventVisual;
+	public UnityEvent BeatEvent, BeatEventVisual;
 
+	[SerializeField]
+	private float bpm, tempo;
 
-	public float bpm;
-	public float tempo;
-	public float beatTravelSpeed;
-	public float beatSpawnSpeed;
+	public float beatTravelSpeed, beatSpawnSpeed;
 	public int beatSpawnedTotal;
 
 	// Nr to determine end of turn / failure
 	public int beatsPassed;
-
 	public float beatVisualAnimationStates;
 
-
 	// Rhythm Game Success
-	public float beatHits;
-	public float beatHitsRequired;
-	//AbilityController abilityController;
-	CombatController combatController;
+	public float beatHits, beatHitsRequired;
+	private CombatController combatController;
 
-	public float buttonPressed;
-	public float buttonWindow;
+	public float buttonPressed, buttonWindow;
 
 	// Visual
-
 	public GameObject beatProgressVisual;
-
 	public GameObject beatText;
-
 	public GameObject beatGoal;
-	GameObject beatInterface;
-	//BeatSpawner beatSpawner;
+	private GameObject beatInterface;
 
 	public bool turnEnded;
 
 	void Awake () {
 		BeatEvent = new UnityEvent ();
 		BeatEventVisual = new UnityEvent ();
-
 	}
 
 	void Start () {
@@ -59,63 +48,50 @@ public class RhythmGameController : MonoBehaviour {
 		StartCoroutine(spawnOnBPM());
 		StartCoroutine(BPM());
 
-		// 
 		buttonWindow = 0.3f;
 
 		turnEnded = true;
 		// Rhythm Game Success
-		//abilityController = GameObject.FindGameObjectWithTag ("AbilityController").GetComponent<AbilityController> ();
 		combatController = GameObject.FindGameObjectWithTag ("CombatController").GetComponent<CombatController> ();
 		beatGoal = GameObject.FindGameObjectWithTag ("BeatGoal");
 		beatInterface = GameObject.FindGameObjectWithTag ("BeatInterface");
 		beatProgressVisual = GameObject.FindGameObjectWithTag ("BeatProgressVisual");
-
-		//beatSpawner = GameObject.FindGameObjectWithTag ("BeatSpawner").GetComponent<BeatSpawner>();
 		beatInterface.SetActive (false);
-
 	}
 
 	void Update() {
 		if (beatsPassed >= beatSpawnedTotal && !turnEnded) {
-
 			turnEnded = true;
-			// FAILED
+			// Failed
 			if (combatController.activeCharacter.tag == "PC") {
 				StartCoroutine(combatController.EndPlayerTurn());
-
 			} else {
 				combatController.selectedAbility.effect();
-
 			}
-
 		}
 	}
 
+	// Spawns a new beat indicator on every Beat
 	public IEnumerator spawnOnBPM () {
 		while(true) {
 			BeatEvent.Invoke ();
 			yield return new WaitForSeconds(tempo / beatSpawnSpeed);
 		}
-
 	}
 
+	// Pulses the beat target in the middle of the screen on each beat
 	public IEnumerator BPM () {
 		while(true) {
 			BeatEventVisual.Invoke ();
 			yield return new WaitForSeconds(tempo);
 		}
-
 	}
-
-
-
+		
+	// The amount of correctly hit notes/beats is updated here
 	public void UpdateBeatHits (int update) {
-
-
 		// Show Beat Text feedback
 		GameObject beatTxt = Instantiate (beatText, beatGoal.transform.position, this.transform.rotation);
 		beatTxt.GetComponent<BeatText>().SetText(update);
-
 		if (update > 0) {
 			beatHits += 1;
 			//beatHits += update;
@@ -123,22 +99,20 @@ public class RhythmGameController : MonoBehaviour {
 		} else {
 			//beatHits -= 1;
 		}
-
+		// Set beat hits to 0 if updated below 0
 		if (beatHits < 0) {
 			beatHits = 0;
 		}
-				
+		// Ends the Rhythm Game due to having reached the required number of hits/beats
 		if (beatHits >= beatHitsRequired) {
 			if (!turnEnded) {
-				// Use Ability
 				combatController.selectedAbility.effect();
 				turnEnded = true;
 			}
-		
 		}
-
 	}
 		
+	// Used to fade the rhythm games interface in and out
 	public IEnumerator FadeRhythmGame(bool fadeIn) {
 		float fadeVal;
 		if (fadeIn) {
@@ -159,8 +133,4 @@ public class RhythmGameController : MonoBehaviour {
 		}
 	}
 
-
-
-
-
-}
+} // End
