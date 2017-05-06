@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+// Sets the text and pulsing animation of the Rhythm Game's intro screen
 public class BeatKeyPressText : MonoBehaviour {
-	RhythmGameController rhythmGameController;
-	CombatController combatController;
+	private RhythmGameController rhythmGameController;
+	private CombatController combatController;
 
-	Vector3 scaleOriginal;
-	Vector3 scalePulse;
+	Vector3 scaleOriginal, scalePulse;
 
 	public Sprite spriteBlack;
 	public Sprite spriteWhite;
-
 
 	void Start () {
 		rhythmGameController = GameObject.FindGameObjectWithTag ("RhythmGameController").GetComponent<RhythmGameController>();
@@ -31,17 +29,14 @@ public class BeatKeyPressText : MonoBehaviour {
 		rhythmGameController.BeatEventVisual.AddListener (Pulse);
 	}
 
-
 	void Pulse () {
 		StartCoroutine (PulseImage());
 	}
 
 	IEnumerator PulseImage () {
 		this.transform.localScale = scalePulse;
-
 		yield return new WaitForSeconds (0.1f);
 		this.transform.localScale = scaleOriginal;
-
 	}
 
 	public void ChangeState(string character) {
@@ -49,7 +44,6 @@ public class BeatKeyPressText : MonoBehaviour {
 			this.GetComponent<Text> ().text = "Defend!";
 		} else {
 			this.GetComponent<Text> ().text = combatController.selectedAbility.name;
-			//this.GetComponent<Text> ().text = combatController.selectedAbility.name;
 		}
 	}
 }

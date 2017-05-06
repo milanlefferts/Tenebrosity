@@ -8,6 +8,7 @@ using UnityEngine.UI;
 // Attached to beat indicators, controlling their movement and colliders
 public class BeatIndicator : MonoBehaviour {
 	// Direction Indicator
+	[HideInInspector]
 	public Sprite beatIndicatorLeft, beatIndicatorRight, beatIndicatorUp, beatIndicatorDown, beatIndicatorEmpty;
 
 	Image direction1, direction2;
@@ -24,7 +25,7 @@ public class BeatIndicator : MonoBehaviour {
 
 	// Colliders
 	private bool touchingInner, touchingMid, touchingOuter;
-	private bool isFirst;
+	public bool isFirst;
 
 	[SerializeField]
 	private bool isBeingDestroyed, hasBeenHit;
@@ -33,7 +34,6 @@ public class BeatIndicator : MonoBehaviour {
 	public UnityEvent KeyPress;
 
 	RhythmGameController rhythmGameController;
-	//CombatController combatController;
 
 	KeyCode input;
 
@@ -171,7 +171,6 @@ public class BeatIndicator : MonoBehaviour {
 			// if player mistake
 			else {
 				rhythmGameController.UpdateBeatHits (-1);
-				print ("good key, too soon");
 			}
 		}
 	}
@@ -207,22 +206,12 @@ public class BeatIndicator : MonoBehaviour {
 		Destroy (this.gameObject);
 	}
 
+	// Detects first collider hit with the BeatGoal
 	void OnTriggerEnter (Collider collider) {
-		switch (collider.name) {
-		case "ColliderInner":
-			touchingInner = true;
-			break;
-		case "ColliderMid":
-			touchingMid = true;
-			break;
-		case "ColliderOuter":
-			touchingOuter = true;
-			break;
-		default:
-			break;
-		}
+		SetTouchingTrue (collider.name);
 	}
 
+	// Destroys indicators when the Rhythm Game ends
 	void OnDisable() {
 		Destroy (this.gameObject);
 	}

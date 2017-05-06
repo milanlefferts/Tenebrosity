@@ -4,24 +4,21 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class BeatSpawner : MonoBehaviour {
-
+	[HideInInspector]
 	public bool isSpawning;
 
 	public GameObject beatIndicator;
 
 	public LinkedList<GameObject> beatStack;
-	GameObject newestBeat;
-	bool firstSpawn;
+	private GameObject newestBeat;
+	private bool firstSpawn;
 	public int spawned;
 
-	GameObject beatSpawnLocation1;
-	GameObject beatSpawnLocation2;
-	RectTransform beatSpawnTarget1;
-	RectTransform beatSpawnTarget2;
+	private GameObject beatSpawnLocation1, beatSpawnLocation2;
+	private RectTransform beatSpawnTarget1, beatSpawnTarget2;
 
-
-	RhythmGameController rhythmGameController;
-	CombatController combatController;
+	private RhythmGameController rhythmGameController;
+	private CombatController combatController;
 
 	void Start () {
 		isSpawning = false;
@@ -37,12 +34,9 @@ public class BeatSpawner : MonoBehaviour {
 		beatSpawnTarget1 = this.GetComponent<RectTransform>().FindChild("BeatSpawnTarget1").GetComponent<RectTransform>();
 		beatSpawnTarget2 = this.GetComponent<RectTransform>().FindChild("BeatSpawnTarget2").GetComponent<RectTransform>();
 
-
+		// Controls BeatIndicators spawning on the rhythm
 		rhythmGameController.BeatEvent.AddListener (SpawnBeatIndicator);
 		beatStack = new LinkedList<GameObject> ();
-
-
-
 	}
 
 	void Update () {
@@ -51,7 +45,7 @@ public class BeatSpawner : MonoBehaviour {
 		}
 	}
 
-	IEnumerator LastBeatSpawned () {
+	private IEnumerator LastBeatSpawned () {
 		yield return new WaitForSeconds (2f);
 		combatController.rhythmGameActive = false;
 	}
@@ -60,7 +54,7 @@ public class BeatSpawner : MonoBehaviour {
 		firstSpawn = true;
 	}
 
-	GameObject ChooseBeatSpawnLocation () {
+	private GameObject ChooseBeatSpawnLocation () {
 		int rand = Random.Range (0, 2);
 		if (rand == 0) {
 			return beatSpawnLocation1;
@@ -69,7 +63,7 @@ public class BeatSpawner : MonoBehaviour {
 		}
 	}
 
-	RectTransform ChooseBeatTarget (GameObject loc) {
+	private RectTransform ChooseBeatTarget (GameObject loc) {
 		if (loc.name == "BeatSpawnLocation1") {
 			return beatSpawnTarget1;
 		} else {
@@ -77,7 +71,8 @@ public class BeatSpawner : MonoBehaviour {
 		}
 	}
 
-
+	// Allows BeatIndicator spawning on the beat
+	// ! Must be public to be accessible through Event
 	public void SpawnBeatIndicator () {
 		if (isSpawning) {
 			spawned += 1;
@@ -95,4 +90,4 @@ public class BeatSpawner : MonoBehaviour {
 			}
 		}
 	}
-}
+} // End

@@ -1,9 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\RhythmGame\BeatIndicator.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\RhythmGame\BeatSpawner.cs">
     <Files>
-      <File FileName="Assets\Scripts\RhythmGame\BeatIndicator.cs" Line="218" Column="24" />
-      <File FileName="Assets\Scripts\RhythmGame\RhythmGameController.cs" Line="30" Column="29" />
+      <File FileName="Assets\Scripts\RhythmGame\BeatProgressVisual.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\RhythmGame\BeatSpawner.cs" Line="58" Column="34" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

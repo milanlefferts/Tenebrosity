@@ -2,25 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Separate class for the BeatIndicator/note collider
 public class BeatIndicatorCollider : MonoBehaviour {
+	private BeatIndicator beatIndicator;
 
-	BeatIndicator beatIndicator;
-	// Use this for initialization
 	void Start () {
 		beatIndicator = transform.parent.gameObject.GetComponent<BeatIndicator> ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
+	// Set collider touching to true
 	void OnTriggerEnter (Collider collider) {
 		if (collider.name == this.name) {
 			beatIndicator.SetTouchingTrue(this.name);
 		}
 	}
 
+	// Set collider touching to false
 	void OnTriggerExit (Collider collider) {
 		if (collider.name == this.name) {
 			beatIndicator.SetTouchingFalse(this.name);

@@ -4,32 +4,39 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
+// Controls the flow of combat and turn structure (including menus)
+// !!! Menus currently part of this class, must separate in Menu class
 public class CombatController : MonoBehaviour {
 
 	private GameController gameController;
 
-	bool combat;
+	private bool combat;
 	public GameObject activeCharacter;
-	public GameObject[] enemies, friendlies;
 
+	[HideInInspector]
+	public GameObject[] enemies, friendlies;
+	[HideInInspector]
 	public Vector3 activeCharacterPos;
 
 	// Turn Order
+	[HideInInspector]
 	public bool turnInProgress;
-	int enemyCounter, enemyCounterMax;
-	int friendlyCounter, friendlyCounterMax;
+	private int enemyCounter, enemyCounterMax;
+	private int friendlyCounter, friendlyCounterMax;
 
 	//Ability Use
+	[HideInInspector]
 	public bool selectingAbility;
 	private GameObject abilityMenu, selectedAbilityBar, abilityDescription;
 	public Ability selectedAbility;
 	private AbilityController abilityController;
 
 	// Selection
-	public string targetingMode;
+	private string targetingMode;
 
-	public bool selectingTarget;
-	public int currentEnemyNr = 0;
+	[HideInInspector]
+	private bool selectingTarget;
+	private int currentEnemyNr = 0;
 	public GameObject target;
 
 	// Combat Positions
@@ -38,6 +45,7 @@ public class CombatController : MonoBehaviour {
 	// Enemy Targeting
 	private List<GameObject> targetList = new List<GameObject>();
 	private List<GameObject> characterList = new List<GameObject>();
+	[HideInInspector]
 	public GameObject[] targets;
 	bool targetIsMoving;
 

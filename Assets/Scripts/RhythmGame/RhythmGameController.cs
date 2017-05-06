@@ -10,12 +10,13 @@ public class RhythmGameController : MonoBehaviour {
 
 	[SerializeField]
 	private float bpm, tempo;
-
+	[HideInInspector]
 	public float beatTravelSpeed, beatSpawnSpeed;
 	public int beatSpawnedTotal;
 
 	// Nr to determine end of turn / failure
 	public int beatsPassed;
+	[HideInInspector]
 	public float beatVisualAnimationStates;
 
 	// Rhythm Game Success
@@ -41,12 +42,11 @@ public class RhythmGameController : MonoBehaviour {
 		// Tempo
 		bpm = 115f;
 		tempo = 60f / bpm;
-
 		beatSpawnSpeed = 1f;
 		beatTravelSpeed = 160f;
 
-		StartCoroutine(spawnOnBPM());
-		StartCoroutine(BPM());
+		StartCoroutine(OnBPM(BeatEvent, beatSpawnSpeed));
+		StartCoroutine(OnBPM(BeatEventVisual, 0f));
 
 		buttonWindow = 0.3f;
 
@@ -71,19 +71,15 @@ public class RhythmGameController : MonoBehaviour {
 		}
 	}
 
-	// Spawns a new beat indicator on every Beat
-	public IEnumerator spawnOnBPM () {
-		while(true) {
-			BeatEvent.Invoke ();
-			yield return new WaitForSeconds(tempo / beatSpawnSpeed);
+	// Default: Spawns a new beat indicator on every Beat
+	// If beatspawn equals 0: Pulses the beat target in the middle of the screen on each beat
+	public IEnumerator OnBPM (UnityEvent uevent, float beatspawn) {
+		if (beatspawn == 0f) {
+			beatspawn = 1f;
 		}
-	}
-
-	// Pulses the beat target in the middle of the screen on each beat
-	public IEnumerator BPM () {
 		while(true) {
-			BeatEventVisual.Invoke ();
-			yield return new WaitForSeconds(tempo);
+			uevent.Invoke ();
+			yield return new WaitForSeconds(tempo / beatspawn);
 		}
 	}
 		
@@ -95,7 +91,6 @@ public class RhythmGameController : MonoBehaviour {
 		if (update > 0) {
 			beatHits += 1;
 			//beatHits += update;
-
 		} else {
 			//beatHits -= 1;
 		}
